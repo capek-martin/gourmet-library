@@ -1,0 +1,23 @@
+// Variables
+$primary-color: #4caf50;
+$secondary-color: #6c757d;
+$background-color: #f0f0f0;
+$text-color: #333;
+
+// Global Styles
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  color: $text-color;
+  background-color: $background-color;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin-bottom: 1rem;
+}

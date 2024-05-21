@@ -1,0 +1,69 @@
+// Variables
+$primary-color: #4caf50;
+$secondary-color: #6c757d;
+$background-color: #f0f0f0;
+$text-color: #333;
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.p-menubar {
+  margin: 0;
+  background-color: $primary-color;
+  border: none;
+  color: white;
+}
+
+.p-menubar-button {
+  color: #fff;
+  border: 1px solid white;
+}
+.p-menubar .p-menuitem-link {
+  color: #fff;
+  padding: 8px;
+}
+.p-menuitem-text,
+.p-menuitem-icon {
+  font-size: 1.2rem;
+}
+
+.p-menuitem {
+  background-color: $primary-color;
+}
+
+.p-menuitem-content:hover,
+.p-menuitem-content:active {
+  background-color: #357b38;
+}
+.p-menuitem-link > * {
+  color: #fff;
+}
+
+.p-submenu-list {
+  min-width: fit-content;
+}
+.p-submenu-list a {
+  background-color: #fff;
+  .p-menuitem-icon,
+  .p-menuitem-text {
+    color: $text-color;
+  }
+}
+
+// TODO - lépe nastylovat menu
+.p-menubar.p-menubar-mobile-active .p-menubar-root-list {
+  background-color: $primary-color;
+  width: 97vw;
+  left: -84vw;
+}
+
+.p-submenu-list a:hover {
+  background-color: #357b38;
+  .p-menuitem-icon,
+  .p-menuitem-text {
+    color: #fff;
+  }
+}
