@@ -11,14 +11,13 @@ import { RootState } from "../store/store";
 import { paths } from "../utils/core/routerContainer";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useState } from "react";
-import { API_BASE_URL, apiUrl } from "../utils/core/api";
+import supabase from "../utils/core/supabase";
 
 export const RecipeCreate = () => {
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const currentUser = useSelector((state: RootState) => state.user);
-
   const handleOnSubmit: SubmitHandler<RecipeInputs> = async (
     values: RecipeInputs
   ) => {
@@ -33,20 +32,22 @@ export const RecipeCreate = () => {
         })
       );
       if (addRecipe.fulfilled.match(response)) {
-        // Append images to form data
-        // TODO - multiple images in one request!!
-        if (response.payload.id && selectedFile) {
-          const uploadData = new FormData();
-          if (selectedFile)
-            uploadData.append("recipe", response.payload.id.toString());
-          for (let i = 0; i < selectedFile.length; i++) {
-            uploadData.append("image", selectedFile[i], selectedFile[i].name);
-            fetch(`${API_BASE_URL}${apiUrl.RECIPE_IMAGES}`, {
-              method: "POST",
-              body: uploadData,
-            });
+        // Upload images to Supabase
+        if (selectedFile.length > 0) {
+          for (const file of selectedFile) {
+            const { error } = await supabase.storage
+              .from("recipe-images")
+              .upload(response.payload.id + "/" + file.name, file);
+
+            if (error) {
+              toast.error(`Failed to upload image: ${error.message}`, {
+                ...toastSetting,
+              });
+              return;
+            }
           }
         }
+
         toast.success("Recipe created", { ...toastSetting });
         navigate(paths.HOME);
       } else if (addRecipe.rejected.match(response)) {

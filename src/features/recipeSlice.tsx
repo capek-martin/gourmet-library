@@ -109,7 +109,7 @@ export const deleteRecipe = createAsyncThunk(
 
 export const deleteRecipeImage = createAsyncThunk(
   "recipes/deleteRecipeImage",
-  async ({ imageId }: { imageId: number }) => {
+  async ({ imageId }: { imageId: string }) => {
     const { error } = await supabase
       .from("recipe_images")
       .delete()

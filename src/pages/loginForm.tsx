@@ -52,7 +52,7 @@ export const LoginForm = () => {
         <div className="flex flex-column md:flex-row">
           <div className="w-full md:w-5 flex flex-column align-items-center justify-content-center gap-3 py-5">
             <div className="flex flex-wrap justify-content-center align-items-center gap-2">
-              <label className="w-6rem">Username</label>
+              <label className="w-6rem">Email</label>
               <InputText
                 id="email"
                 type="email"

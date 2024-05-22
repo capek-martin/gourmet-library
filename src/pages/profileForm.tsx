@@ -22,13 +22,13 @@ export const ProfileForm = () => {
     dispatch(fetchRecipes({ numRecords: 100 }));
   }, []);
 
-  const onDelete = async (id: number) => {
+  const onDelete = async (id: string) => {
     await dispatch(deleteRecipe(id)).then(() => {
       toast.error("Record deleted.", { ...toastSetting });
     });
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     confirmDialog({
       message: "Do you want to delete this record?",
       header: "Delete Confirmation",

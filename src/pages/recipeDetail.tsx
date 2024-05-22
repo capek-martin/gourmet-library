@@ -2,7 +2,7 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import {
@@ -17,9 +17,12 @@ import { Galleria } from "primereact/galleria";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
+import { getUrlsForRecipeImages } from "../utils/app/supabaseUtils";
+import { RecipeImage } from "../types/recipe.types";
 
 export const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [images, setImages] = useState<RecipeImage[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -30,22 +33,19 @@ export const RecipeDetail = () => {
 
   useEffect(() => {
     dispatch(fetchRecipes({ numRecords: 100 }));
+    if (id) getUrlsForRecipeImages(id).then((r) => setImages(r));
   }, []);
 
   const handleEditRedirect = () => {
     navigate(`${paths.RECIPES}/edit/${id}`);
   };
 
-  const itemTemplate = (item: any) => {
-    return <img src={item.image} alt={item.alt} style={{ width: "100%" }} />;
-  };
-
-  const thumbnailTemplate = (item: any) => {
+  const itemTemplate = (image: RecipeImage) => {
     return (
       <img
-        src={item.image}
-        alt={item.alt}
-        style={{ width: "90%", maxHeight: "5rem" }}
+        src={image.url}
+        alt={image.title}
+        style={{ maxHeight: "20rem", maxWidth: "30rem", display: "block" }}
       />
     );
   };
@@ -102,10 +102,10 @@ export const RecipeDetail = () => {
             )}
           </div>
         }
-        className="my-3 border-round-lg border-noround-bottom"
+        className="my-3 border-round-lg"
       >
         <div className="flex flex-wrap justify-content-between">
-          <div className="col-12 md:col-6">
+          <div className="col-12 md:col-6 border">
             <div className="recipe-details">
               <p>
                 <b>Description:</b> {recipe?.description}
@@ -145,14 +145,17 @@ export const RecipeDetail = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 md:col-6">
-            <Galleria
-              value={recipe.images}
-              // responsiveOptions={responsiveOptions}
-              numVisible={3}
-              item={itemTemplate}
-              thumbnail={thumbnailTemplate}
-            />
+          <div className="col-12 md:col-6 flex items-center justify-center m-auto">
+            <div className="card m-auto">
+              <Galleria
+                value={images}
+                style={{ maxHeight: "50%" }}
+                showThumbnails={false}
+                showIndicators={true}
+                showItemNavigators
+                item={itemTemplate}
+              />
+            </div>
           </div>
           <div className="col-12">
             <Divider />

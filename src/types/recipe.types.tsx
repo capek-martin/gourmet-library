@@ -10,7 +10,7 @@ export interface RecipeInputs {
   estimatedPrice?: number;
   // TODO
   images?: any;
-  authorId?: number;
+  authorId?: string;
 }
 
 export interface Recipe extends RecipeInputs {
@@ -26,7 +26,11 @@ export enum DifficultyOpt {
 }
 
 export interface RecipeImage {
-  id: number;
-  recipe: number;
-  src: string;
+  id: string;
+  title: string;
+  url: string;
+}
+
+export interface RecipeImages {
+  [key: string]: string;
 }

@@ -3,7 +3,11 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Dispatch, useEffect, useState } from "react";
-import { DifficultyOpt, RecipeInputs } from "../types/recipe.types";
+import {
+  DifficultyOpt,
+  RecipeImage,
+  RecipeInputs,
+} from "../types/recipe.types";
 import { TextEditor } from "../components/TextEditor/TextEditor";
 import { Card } from "primereact/card";
 import { RadioButton } from "primereact/radiobutton";
@@ -22,7 +26,7 @@ interface Props {
   onSubmit: SubmitHandler<RecipeInputs>;
   defaultValues?: RecipeInputs;
   setSelectedFile: Dispatch<any>;
-  onDeleteImage?: (imageId: number) => void;
+  onDeleteImage?: (imageId: string) => void;
 }
 
 export const RecipeForm = ({
@@ -70,7 +74,7 @@ export const RecipeForm = ({
   const inputCss = `w-full h-2.5rem`;
   const containerCss = `field col-12 m-0`;
 
-  const itemTemplate = (item: any) => {
+  const itemTemplate = (img: RecipeImage) => {
     return (
       <>
         {onDeleteImage && (
@@ -84,21 +88,15 @@ export const RecipeForm = ({
               top: 10,
               color: "red",
             }}
-            onClick={() => onDeleteImage(item.id)}
+            onClick={() => onDeleteImage(img.id)}
           />
         )}
-        <img src={item.image} alt={item.alt} style={{ width: "100%" }} />
+        <img
+          src={img.url}
+          alt={img.title}
+          style={{ maxHeight: "20rem", maxWidth: "30rem", display: "block" }}
+        />
       </>
-    );
-  };
-
-  const thumbnailTemplate = (item: any) => {
-    return (
-      <img
-        src={item.image}
-        alt={item.alt}
-        style={{ width: "90%", maxHeight: "5rem" }}
-      />
     );
   };
 
@@ -221,14 +219,17 @@ export const RecipeForm = ({
                 onChange={(e) => setSelectedFile(e.target.files)}
               />
             </div>
-            <div className="col-10">
-              <Galleria
-                value={defaultValues?.images}
-                // responsiveOptions={responsiveOptions}
-                numVisible={3}
-                item={itemTemplate}
-                thumbnail={thumbnailTemplate}
-              />
+            <div className="col-12 md:col-6 flex items-center justify-center m-auto">
+              <div className="card m-auto">
+                <Galleria
+                  value={defaultValues?.images}
+                  style={{ maxHeight: "50%" }}
+                  showThumbnails={false}
+                  showIndicators={true}
+                  showItemNavigators
+                  item={itemTemplate}
+                />
+              </div>
             </div>
           </div>
         </div>

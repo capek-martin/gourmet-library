@@ -1,6 +1,6 @@
 import { RecipeForm } from "./recipeForm";
 import { useNavigate, useParams } from "react-router-dom";
-import { Recipe, RecipeInputs } from "../types/recipe.types";
+import { Recipe, RecipeImage, RecipeInputs } from "../types/recipe.types";
 import { SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -18,9 +18,11 @@ import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
 import { paths } from "../utils/core/routerContainer";
 import supabase from "../utils/core/supabase";
+import { getUrlsForRecipeImages } from "../utils/app/supabaseUtils";
 
 export const RecipeEdit = () => {
   const { id } = useParams<{ id: string }>();
+  const [images, setImages] = useState<RecipeImage[]>([]);
   const [selectedFile, setSelectedFile] = useState<File[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
@@ -35,6 +37,7 @@ export const RecipeEdit = () => {
 
   useEffect(() => {
     dispatch(fetchRecipes({ numRecords: 100 }));
+    if (id) getUrlsForRecipeImages(id).then((r) => setImages(r));
   }, []);
 
   useEffect(() => {
@@ -42,7 +45,7 @@ export const RecipeEdit = () => {
     dispatch(fetchRecipeById(id));
   }, [dispatch, id, recipeList]);
 
-  const deleteImage = async (imageId: number) => {
+  const deleteImage = async (imageId: string) => {
     try {
       const response = await dispatch(
         deleteRecipeImage({
@@ -78,19 +81,15 @@ export const RecipeEdit = () => {
       // Upload images to Supabase
       if (selectedFile.length > 0) {
         for (const file of selectedFile) {
-          const fileName = `${id}-${Date.now()}-${file.name}`;
-          const { data, error } = await supabase.storage
+          const { error } = await supabase.storage
             .from("recipe-images")
-            .upload(fileName, file);
+            .upload(id + "/" + file.name, file);
 
           if (error) {
-            console.error("Error uploading image:", error.message);
-            toast.error(`Failed to upload image: ${error.message}`, {
+            return toast.error(`Failed to upload image: ${error.message}`, {
               ...toastSetting,
             });
-            return;
           }
-          console.log("Image uploaded successfully:", data);
         }
       }
 
@@ -109,7 +108,7 @@ export const RecipeEdit = () => {
   return (
     <RecipeForm
       onSubmit={handleOnSubmit}
-      defaultValues={recipe}
+      defaultValues={{ ...recipe, images: images }}
       setSelectedFile={setSelectedFile}
       onDeleteImage={deleteImage}
     />
