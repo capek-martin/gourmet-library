@@ -13,7 +13,6 @@ import {
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { Loader } from "../components/loader/loader";
 import { paths } from "../utils/core/routerContainer";
-import { Galleria } from "primereact/galleria";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
@@ -39,16 +38,6 @@ export const RecipeDetail = () => {
 
   const handleEditRedirect = () => {
     navigate(`${paths.RECIPES}/edit/${id}`);
-  };
-
-  const itemTemplate = (image: RecipeImage) => {
-    return (
-      <img
-        src={image.url}
-        alt={image.title}
-        style={{ maxHeight: "20rem", maxWidth: "30rem", display: "block" }}
-      />
-    );
   };
 
   const onDelete = async () => {

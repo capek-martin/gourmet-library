@@ -48,16 +48,10 @@ export const RecipesPage = () => {
     const authorIdParam = params.get("authorId");
     const sizeParam = params.get("size");
 
-    // Parse authorId from the parameter, default to undefined if not provided or 0
-    const authorId = authorIdParam
-      ? Number(authorIdParam) || undefined
-      : undefined;
-
-    // Parse size from the parameter, default to 100 if not provided or 0
     const size = sizeParam ? Number(sizeParam) || 100 : 100;
     dispatch(
       fetchRecipes({
-        authorId: authorId,
+        authorId: authorIdParam ?? undefined,
         numRecords: size,
       })
     );
