@@ -1,6 +1,6 @@
 import { Galleria } from "primereact/galleria";
 import { RecipeImage } from "../../types/recipe.types";
-
+import foodPlaceholder from "../../food-placeholder.jpg";
 interface Props {
   images: RecipeImage[];
   onDelete?: (title: string) => void;
@@ -38,7 +38,7 @@ export const ImageContainer = ({ images, onDelete }: Props) => {
   return (
     <div className="card m-auto">
       <Galleria
-        value={images}
+        value={images.length > 0 ? images : [foodPlaceholder]}
         style={{ maxHeight: "50%" }}
         showThumbnails={false}
         showIndicators={ifMultipleImages}

@@ -12,6 +12,7 @@ import { paths } from "../utils/core/routerContainer";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useState } from "react";
 import supabase, { recipeImgBucket } from "../utils/core/supabase";
+import { clearLoading, setLoading } from "../features/loadingSlice";
 
 export const RecipeCreate = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export const RecipeCreate = () => {
     values: RecipeInputs
   ) => {
     try {
+      dispatch(setLoading());
       const response = await dispatch(
         addRecipe({
           ...values,
@@ -55,6 +57,8 @@ export const RecipeCreate = () => {
       }
     } catch (err) {
       toast.error(`${err}`, { ...toastSetting });
+    } finally {
+      dispatch(clearLoading());
     }
   };
 

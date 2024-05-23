@@ -189,12 +189,11 @@ export const RecipeForm = ({
                 onChange={(e) => setSelectedFile(e.target.files)}
               />
             </div>
-            <div className="col-12 md:col-6 flex items-center justify-center m-auto">
-              <ImageContainer
-                images={defaultValues?.images ?? []}
-                onDelete={onDeleteImage}
-              />
-            </div>
+
+            <ImageContainer
+              images={defaultValues?.images ?? []}
+              onDelete={onDeleteImage}
+            />
           </div>
         </div>
 

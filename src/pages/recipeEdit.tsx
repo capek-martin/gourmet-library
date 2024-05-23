@@ -19,6 +19,7 @@ import { toastSetting } from "../utils/app/toastSetting";
 import { paths } from "../utils/core/routerContainer";
 import supabase, { recipeImgBucket } from "../utils/core/supabase";
 import { getUrlsForRecipeImages } from "../utils/app/supabaseUtils";
+import { clearLoading, setLoading } from "../features/loadingSlice";
 
 export const RecipeEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -47,6 +48,7 @@ export const RecipeEdit = () => {
 
   const deleteImage = async (title: string) => {
     if (!id) return;
+    dispatch(setLoading());
     try {
       const response = await dispatch(
         deleteRecipeImage({
@@ -56,11 +58,14 @@ export const RecipeEdit = () => {
       );
       if (response) {
         location.reload();
+        toast.error("Record deleted.", { ...toastSetting });
       } else {
         console.error("Failed to delete image");
       }
     } catch (error) {
       console.error("Error deleting image:", error);
+    } finally {
+      dispatch(clearLoading());
     }
   };
 
@@ -70,6 +75,7 @@ export const RecipeEdit = () => {
     if (!id) return;
     try {
       // Update recipe data
+      dispatch(setLoading());
       const response = await dispatch(
         updateRecipe({
           id: id,
@@ -105,6 +111,8 @@ export const RecipeEdit = () => {
       }
     } catch (err) {
       toast.error(`${err}`, { ...toastSetting });
+    } finally {
+      dispatch(clearLoading());
     }
   };
 

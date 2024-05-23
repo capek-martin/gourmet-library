@@ -11,15 +11,18 @@ import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { toastSetting } from "../utils/app/toastSetting";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../utils/core/routerContainer";
+import { Loader } from "../components/loader/loader";
 
 export const ProfileForm = () => {
   const navigate = useNavigate();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
-  const { recipes: recipeList } = useSelector(
-    (state: RootState) => state.recipes
-  );
+  const {
+    recipes: recipeList,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.recipes);
 
   useEffect(() => {
     dispatch(fetchRecipes({ numRecords: 100, authorId: userInfo?.user_id }));
@@ -47,6 +50,9 @@ export const ProfileForm = () => {
       <span className="text-xl text-900 font-bold">My recipes</span>
     </div>
   );
+
+  if (loading) return <Loader />;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
