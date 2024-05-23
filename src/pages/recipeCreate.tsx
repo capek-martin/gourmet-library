@@ -11,7 +11,7 @@ import { RootState } from "../store/store";
 import { paths } from "../utils/core/routerContainer";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useState } from "react";
-import supabase from "../utils/core/supabase";
+import supabase, { recipeImgBucket } from "../utils/core/supabase";
 
 export const RecipeCreate = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export const RecipeCreate = () => {
         if (selectedFile.length > 0) {
           for (const file of selectedFile) {
             const { error } = await supabase.storage
-              .from("recipe-images")
+              .from(recipeImgBucket)
               .upload(response.payload.id + "/" + file.name, file);
 
             if (error) {

@@ -9,8 +9,11 @@ import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { toastSetting } from "../utils/app/toastSetting";
+import { useNavigate } from "react-router-dom";
+import { paths } from "../utils/core/routerContainer";
 
 export const ProfileForm = () => {
+  const navigate = useNavigate();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
@@ -19,7 +22,7 @@ export const ProfileForm = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchRecipes({ numRecords: 100 }));
+    dispatch(fetchRecipes({ numRecords: 100, authorId: userInfo?.user_id }));
   }, []);
 
   const onDelete = async (id: string) => {
@@ -60,7 +63,7 @@ export const ProfileForm = () => {
           header="Title"
           body={(item) => (
             <a
-              href={`http://localhost:5173/recipes/${item.id}`}
+              onClick={() => navigate(`${paths.RECIPES}/${item.id}`)}
               className="text-blue-500 no-underline"
             >
               {item.title}

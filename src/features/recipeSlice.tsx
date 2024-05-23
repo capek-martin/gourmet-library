@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Recipe } from "../types/recipe.types";
 import { RootState } from "../store/store";
-import supabase from "../utils/core/supabase";
+import supabase, { recipeImgBucket } from "../utils/core/supabase";
 
 interface RecipeState {
   recipes: Recipe[];
@@ -31,7 +31,7 @@ export const fetchRecipes = createAsyncThunk(
     authorId,
     numRecords,
   }: {
-    authorId?: number;
+    authorId?: string;
     numRecords?: number;
   }) => {
     let query = supabase.from<Recipe>("recipes").select();
@@ -109,11 +109,12 @@ export const deleteRecipe = createAsyncThunk(
 
 export const deleteRecipeImage = createAsyncThunk(
   "recipes/deleteRecipeImage",
-  async ({ imageId }: { imageId: string }) => {
-    const { error } = await supabase
-      .from("recipe_images")
-      .delete()
-      .eq("id", imageId);
+  async ({ recipeId, title }: { recipeId: string; title: string }) => {
+    // Delete the file from storage
+    const { error } = await supabase.storage
+      .from(recipeImgBucket)
+      .remove([`${recipeId}/${title}`]);
+
     if (error) {
       throw new Error(error.message);
     }

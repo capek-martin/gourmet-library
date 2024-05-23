@@ -17,7 +17,7 @@ import { arrayToString } from "../utils/app/utils";
 import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
 import { paths } from "../utils/core/routerContainer";
-import supabase from "../utils/core/supabase";
+import supabase, { recipeImgBucket } from "../utils/core/supabase";
 import { getUrlsForRecipeImages } from "../utils/app/supabaseUtils";
 
 export const RecipeEdit = () => {
@@ -45,11 +45,13 @@ export const RecipeEdit = () => {
     dispatch(fetchRecipeById(id));
   }, [dispatch, id, recipeList]);
 
-  const deleteImage = async (imageId: string) => {
+  const deleteImage = async (title: string) => {
+    if (!id) return;
     try {
       const response = await dispatch(
         deleteRecipeImage({
-          imageId,
+          recipeId: id,
+          title: title,
         })
       );
       if (response) {
@@ -73,6 +75,7 @@ export const RecipeEdit = () => {
           id: id,
           updatedRecipe: {
             ...values,
+            images: undefined,
             ingredients: arrayToString(values.ingredients as any, ";"),
           },
         })
@@ -82,7 +85,7 @@ export const RecipeEdit = () => {
       if (selectedFile.length > 0) {
         for (const file of selectedFile) {
           const { error } = await supabase.storage
-            .from("recipe-images")
+            .from(recipeImgBucket)
             .upload(id + "/" + file.name, file);
 
           if (error) {

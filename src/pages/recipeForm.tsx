@@ -3,11 +3,7 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Dispatch, useEffect, useState } from "react";
-import {
-  DifficultyOpt,
-  RecipeImage,
-  RecipeInputs,
-} from "../types/recipe.types";
+import { DifficultyOpt, RecipeInputs } from "../types/recipe.types";
 import { TextEditor } from "../components/TextEditor/TextEditor";
 import { Card } from "primereact/card";
 import { RadioButton } from "primereact/radiobutton";
@@ -20,13 +16,13 @@ import { Chips } from "primereact/chips";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories, selectCategories } from "../features/categorySlice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { Galleria } from "primereact/galleria";
+import { ImageContainer } from "../components/imageContainer/imageContainer";
 
 interface Props {
   onSubmit: SubmitHandler<RecipeInputs>;
   defaultValues?: RecipeInputs;
   setSelectedFile: Dispatch<any>;
-  onDeleteImage?: (imageId: string) => void;
+  onDeleteImage?: (title: string) => void;
 }
 
 export const RecipeForm = ({
@@ -73,32 +69,6 @@ export const RecipeForm = ({
 
   const inputCss = `w-full h-2.5rem`;
   const containerCss = `field col-12 m-0`;
-
-  const itemTemplate = (img: RecipeImage) => {
-    return (
-      <>
-        {onDeleteImage && (
-          <i
-            className="pi pi-times"
-            style={{
-              fontSize: "2rem",
-              position: "absolute",
-              cursor: "pointer",
-              right: 10,
-              top: 10,
-              color: "red",
-            }}
-            onClick={() => onDeleteImage(img.id)}
-          />
-        )}
-        <img
-          src={img.url}
-          alt={img.title}
-          style={{ maxHeight: "20rem", maxWidth: "30rem", display: "block" }}
-        />
-      </>
-    );
-  };
 
   return (
     <Card
@@ -220,16 +190,10 @@ export const RecipeForm = ({
               />
             </div>
             <div className="col-12 md:col-6 flex items-center justify-center m-auto">
-              <div className="card m-auto">
-                <Galleria
-                  value={defaultValues?.images}
-                  style={{ maxHeight: "50%" }}
-                  showThumbnails={false}
-                  showIndicators={true}
-                  showItemNavigators
-                  item={itemTemplate}
-                />
-              </div>
+              <ImageContainer
+                images={defaultValues?.images ?? []}
+                onDelete={onDeleteImage}
+              />
             </div>
           </div>
         </div>

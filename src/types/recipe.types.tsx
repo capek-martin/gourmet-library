@@ -9,7 +9,7 @@ export interface RecipeInputs {
   difficulty?: DifficultyOpt;
   estimatedPrice?: number;
   // TODO
-  images?: any;
+  images?: RecipeImage[];
   authorId?: string;
 }
 

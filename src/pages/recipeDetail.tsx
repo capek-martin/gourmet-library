@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
 import { getUrlsForRecipeImages } from "../utils/app/supabaseUtils";
 import { RecipeImage } from "../types/recipe.types";
+import { ImageContainer } from "../components/imageContainer/imageContainer";
 
 export const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -146,16 +147,7 @@ export const RecipeDetail = () => {
             </div>
           </div>
           <div className="col-12 md:col-6 flex items-center justify-center m-auto">
-            <div className="card m-auto">
-              <Galleria
-                value={images}
-                style={{ maxHeight: "50%" }}
-                showThumbnails={false}
-                showIndicators={true}
-                showItemNavigators
-                item={itemTemplate}
-              />
-            </div>
+            <ImageContainer images={images} />
           </div>
           <div className="col-12">
             <Divider />

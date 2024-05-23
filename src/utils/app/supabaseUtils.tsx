@@ -1,12 +1,12 @@
 import { RecipeImage } from "../../types/recipe.types";
-import supabase from "../core/supabase";
+import supabase, { recipeImgBucket } from "../core/supabase";
 
 export const getUrlsForRecipeImages = async (
   recipeId: string,
   getFirstOnly = false
 ) => {
   const { data: files, error } = await supabase.storage
-    .from("recipe-images")
+    .from(recipeImgBucket)
     .list(recipeId);
 
   if (error) {
@@ -19,7 +19,7 @@ export const getUrlsForRecipeImages = async (
   const images = files.reduce((acc, file, index) => {
     if (getFirstOnly && index > 0) return acc;
     const { publicURL } = supabase.storage
-      .from("recipe-images")
+      .from(recipeImgBucket)
       .getPublicUrl(`${recipeId}/${file.name}`);
     acc.push({ id: file.id, url: publicURL, title: file.name } as RecipeImage);
     return acc;

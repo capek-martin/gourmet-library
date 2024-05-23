@@ -1,21 +1,20 @@
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import http, { apiUrl } from "../utils/core/api";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../utils/core/routerContainer";
 import { useForm } from "react-hook-form";
 import { UserInputs } from "../types/user.types";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { setUser } from "../features/userSlice";
-import { AxiosError } from "axios";
-import { extractErrorMessage } from "../utils/app/utils";
+import { registerUser, selectUserError } from "../features/userSlice";
+import { extractErrorMessage, isValidEmail } from "../utils/app/utils";
 import { toastSetting } from "../utils/app/toastSetting";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 
 export const RegistrationForm = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const {
     handleSubmit,
     reset,
@@ -24,9 +23,25 @@ export const RegistrationForm = () => {
     formState: { errors },
   } = useForm<UserInputs>();
 
-  const registerUser = ({ email, password }: UserInputs) => {
-    if (!email || !password) return;
-    http
+  const error = useSelector(selectUserError);
+
+  const onSubmit = ({ email, password }: UserInputs) => {
+    if (!isValidEmail(email) || !password) return;
+
+    dispatch(registerUser({ email, password }))
+      .unwrap()
+      .then(() => {
+        toast.success("Registration succesfull", { ...toastSetting });
+        navigate(paths.HOME);
+      })
+      .catch(() => {
+        reset({ email: "", password: "" });
+        // TODO
+        toast.error(extractErrorMessage(error), { ...toastSetting });
+        if (error) toast.error(error, { ...toastSetting });
+      });
+
+    /* http
       .post(apiUrl.REGISTER, {
         email,
         password,
@@ -38,7 +53,7 @@ export const RegistrationForm = () => {
       })
       .catch((error: AxiosError) => {
         toast.error(extractErrorMessage(error), { ...toastSetting });
-      });
+      }); */
   };
 
   const handleSignUp = () => {
@@ -50,7 +65,7 @@ export const RegistrationForm = () => {
   }, [reset]);
 
   return (
-    <form onSubmit={handleSubmit(registerUser)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="card mx-auto mt-8 bg-white border-round-lg">
         <div className="text-center text-3xl font-bold pt-3">
           User Registration
