@@ -18,18 +18,20 @@ import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
 import { ImageContainer } from "../components/imageContainer/imageContainer";
 import { formatTime } from "../utils/app/utils";
+import { fetchCategories } from "../features/categorySlice";
 
 export const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
-
+  const { categories } = useSelector((state: RootState) => state.categories);
   const recipe = useSelector(
     (state: RootState) => id && selectRecipeById(state, id)
   );
 
   useEffect(() => {
+    dispatch(fetchCategories());
     dispatch(fetchRecipes({ numRecords: 100 }));
   }, []);
 
@@ -98,7 +100,8 @@ export const RecipeDetail = () => {
                 <b>Description:</b> {recipe?.description}
               </p>
               <p>
-                <b>Category:</b> {recipe?.categoryName}
+                <b>Category:</b>{" "}
+                {categories.find((c) => c.id === recipe?.categoryId)?.name}
               </p>
               <p>
                 <b>Prep Time:</b> {formatTime(recipe?.prepTime)}

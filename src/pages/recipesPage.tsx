@@ -1,26 +1,23 @@
-import { useNavigate } from "react-router-dom";
-import { paths } from "../utils/core/routerContainer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Recipe } from "../types/recipe.types";
-import foodPlaceholder from "../food-placeholder.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRecipes } from "../features/recipeSlice";
 import { RootState } from "../store/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { ScrollTop } from "primereact/scrolltop";
+import { RecipeCard } from "../components/recipeCard/recipeCard";
+import { RecipeFilters } from "./recipeFilters";
+import { RecipeFilters as Filters } from "../types/recipe.types";
+import { fetchCategories } from "../features/categorySlice";
 
 export const RecipesPage = () => {
-  // all images for all recipes
   const params = new URLSearchParams(location.search);
-  const navigate = useNavigate();
   const { recipes: recipeList } = useSelector(
     (state: RootState) => state.recipes
   );
-  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
-  const handleDetailRedirect = (id: string) => {
-    navigate(`${paths.RECIPES}/${id}`);
-  };
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
     const authorIdParam = params.get("authorId");
@@ -33,7 +30,38 @@ export const RecipesPage = () => {
         numRecords: size,
       })
     );
+    dispatch(fetchCategories());
   }, [dispatch, location.search]);
+
+  useEffect(() => {
+    setFilteredRecipes(recipeList);
+  }, [recipeList]);
+
+  const handleFilterChange = (filters: Filters) => {
+    let updatedRecipes = recipeList;
+
+    if (filters.ingredients) {
+      updatedRecipes = updatedRecipes.filter((recipe) => {
+        if (!recipe.ingredients) return false;
+        return recipe.ingredients
+          .toLowerCase()
+          .includes(filters.ingredients.toLowerCase());
+      });
+    }
+    if (filters.difficulty) {
+      updatedRecipes = updatedRecipes.filter(
+        (recipe) => recipe.difficulty === filters.difficulty
+      );
+    }
+
+    if (filters.categoryId) {
+      updatedRecipes = updatedRecipes.filter(
+        (recipe) => recipe.categoryId === filters.categoryId
+      );
+    }
+
+    setFilteredRecipes(updatedRecipes);
+  };
 
   return (
     <>
@@ -42,34 +70,16 @@ export const RecipesPage = () => {
           <header className="header">
             <h1>Latest recipes</h1>
           </header>
-          <div className="flex flex-wrap justify-content-center gap-4">
-            {recipeList?.map((recipe: Recipe) => (
-              <div
-                className="bg-white border-round-md text-center p-0 col-3 shadow-4 w-18rem"
-                key={recipe.id}
-                onClick={() => recipe.id && handleDetailRedirect(recipe.id)}
-              >
-                <div
-                  className="relative w-full h-64"
-                  style={{
-                    height: "15rem",
-                    overflow: "hidden",
-                  }}
-                >
-                  <img
-                    className="h-full w-full object-cover p-2"
-                    src={recipe?.imgUrls ? recipe?.imgUrls[0] : foodPlaceholder}
-                    alt={recipe.title}
-                  />
-                </div>
-                <div className="px-6 py-4">
-                  <div className="font-bold text-xl mb-2">{recipe.title}</div>
-                  <p className="text-gray-700 text-base">
-                    {recipe.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="flex">
+            {/* TODO */}
+            <div className="hidden lg:block lg:w-2">
+              <RecipeFilters onFilterChange={handleFilterChange} />
+            </div>
+            <div className="w-10 flex flex-wrap justify-content-center mx-auto gap-4">
+              {filteredRecipes?.map((recipe: Recipe) => (
+                <RecipeCard key={recipe.id} recipe={recipe} />
+              ))}
+            </div>
           </div>
         </div>
         <ScrollTop />

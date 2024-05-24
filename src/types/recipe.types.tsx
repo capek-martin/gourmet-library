@@ -24,6 +24,12 @@ export enum DifficultyOpt {
   HARD = "Hard",
 }
 
+export const difficultyOptions = [
+  { label: "Easy", value: "Easy" },
+  { label: "Medium", value: "Medium" },
+  { label: "Hard", value: "Hard" },
+];
+
 export interface RecipeImage {
   id: string;
   title: string;
@@ -32,4 +38,10 @@ export interface RecipeImage {
 
 export interface RecipeImages {
   [key: string]: string;
+}
+
+export interface RecipeFilters {
+  ingredients: string;
+  difficulty: string | null;
+  categoryId: number | null;
 }
