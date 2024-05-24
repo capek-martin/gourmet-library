@@ -57,44 +57,49 @@ export const ProfileForm = () => {
   return (
     <div>
       <h1>User {userInfo?.email}</h1>
-      <DataTable
-        value={recipeList}
-        tableStyle={{ minWidth: "50rem" }}
-        header={headerTemplate}
-        stripedRows
-      >
-        <Column
-          sortable
-          field="title"
-          header="Title"
-          body={(item) => (
-            <a
-              onClick={() => navigate(`${paths.RECIPES}/${item.id}`)}
-              className="text-blue-500 no-underline"
-            >
-              {item.title}
-            </a>
-          )}
-        />
-        <Column field="description" header="Description" />
-        <Column sortable field="categoryName" header="Category" />
-        <Column sortable field="prepTime" header="Preparation time" />
-        <Column sortable field="estimatedPrice" header="Estimated price" />
-        <Column sortable field="difficulty" header="Difficulty" />
-        <Column
-          body={(rowData) => {
-            console.log(rowData.id);
-            return (
-              <Button
-                onClick={() => handleDelete(rowData.id)}
-                icon="pi pi-trash"
-                className="p-button-rounded p-button-danger"
-              />
-            );
-          }}
-          style={{ width: "10%" }}
-        />
-      </DataTable>
+
+      <div className="max-w-full sm:border-1">
+        <DataTable
+          value={recipeList}
+          // tableStyle={{ minWidth: "50rem" }}
+          header={headerTemplate}
+          stripedRows
+          tableStyle={{ overflowX: "hidden" }}
+          scrollable
+        >
+          <Column
+            sortable
+            field="title"
+            header="Title"
+            body={(item) => (
+              <a
+                onClick={() => navigate(`${paths.RECIPES}/${item.id}`)}
+                className="text-blue-500 no-underline"
+              >
+                {item.title}
+              </a>
+            )}
+          />
+          <Column field="description" header="Description" />
+          <Column sortable field="categoryName" header="Category" />
+          <Column sortable field="prepTime" header="Preparation time" />
+          <Column sortable field="estimatedPrice" header="Estimated price" />
+          <Column sortable field="difficulty" header="Difficulty" />
+          <Column
+            body={(rowData) => {
+              console.log(rowData.id);
+              return (
+                <Button
+                  onClick={() => handleDelete(rowData.id)}
+                  icon="pi pi-trash"
+                  className="p-button-rounded p-button-danger"
+                />
+              );
+            }}
+            style={{ width: "10%" }}
+          />
+        </DataTable>
+      </div>
       <ConfirmDialog />
     </div>
   );

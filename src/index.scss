@@ -15,13 +15,6 @@ body {
   background-color: $background-color;
 }
 
-.app-container {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  margin-bottom: 1rem;
-}
-
 .p-progress-spinner-circle {
   stroke: $primary-color !important;
 }

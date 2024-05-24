@@ -9,7 +9,6 @@ import { RootState } from "../store/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { getUrlsForRecipeImages } from "../utils/app/supabaseUtils";
 import { ScrollTop } from "primereact/scrolltop";
-import { Loader } from "../components/loader/loader";
 
 export const RecipesPage = () => {
   // all images for all recipes
@@ -64,8 +63,8 @@ export const RecipesPage = () => {
 
   return (
     <>
-      <div className="app-container p-grid p-dir-col">
-        <div className="app-container">
+      <div className="p-grid p-dir-col">
+        <div>
           <header className="header">
             <h1>Latest recipes</h1>
           </header>

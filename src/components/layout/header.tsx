@@ -1,6 +1,6 @@
 import { Menubar } from "primereact/menubar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../../utils/core/routerContainer";
 import { AutoComplete } from "primereact/autocomplete";
@@ -132,38 +132,34 @@ export const Header = () => {
     navigate(`${paths.RECIPES}/${e.value.id}`);
   };
 
+  const start = (
+    <AutoComplete
+      inputClassName="w-full md:mr-2"
+      placeholder="Search"
+      field="title"
+      value={query}
+      suggestions={filteredRecipes}
+      completeMethod={search}
+      onChange={(e) => setQuery(e.value)}
+      onSelect={handleSelect}
+      itemTemplate={itemTemplate}
+    />
+  );
+
   return (
-    <div className="bg-green-500 text-white">
-      <div className="text-center">
-        <div className="w-12 mx-auto sm:inline-flex align-items-center md:w-8 justify-content-between">
-          <div
-            className="col-12 inline-flex justify-content-center align-items-center cursor-pointer gap-2 md:col-4 md:justify-content-start"
-            onClick={() => navigate(`${paths.HOME}`)}
-          >
-            <FontAwesomeIcon size="2x" icon={faUtensils} />
-            <h2>Gourmet library</h2>
-            <FontAwesomeIcon size="2x" icon={faUtensils} />
-          </div>
-          <div className="col-10 inline-flex gap-2 justify-content-center align-items-center md:col-3">
-            <AutoComplete
-              inputClassName="w-full"
-              field="title"
-              value={query}
-              suggestions={filteredRecipes}
-              completeMethod={search}
-              onChange={(e) => setQuery(e.value)}
-              onSelect={handleSelect}
-              itemTemplate={itemTemplate}
-            />
-            <FontAwesomeIcon
-              size="2x"
-              icon={faSearch}
-              className="cursor-pointer"
-            />
-          </div>
-          <div className="col-2 inline-flex md:col-5 justify-content-end">
-            <Menubar model={items} className="text-white" />
-          </div>
+    <div className="bg-green-500 text-white flex flex-column w-full align-items-center">
+      <div className="w-12 md:w-10 lg:w-8 px-2 md:px-0 md:flex justify-content-between align-items-center">
+        <div className="w-12 md:w-4 align-items-center justify-content-center md:justify-content-start flex gap-2">
+          <FontAwesomeIcon size="2x" icon={faUtensils} />
+          <h2 className="m-0 p-2">Gourmet library</h2>
+          <FontAwesomeIcon size="2x" icon={faUtensils} />
+        </div>
+        <div className="card mx-auto w-10 md:w-8">
+          <Menubar
+            model={items}
+            start={start}
+            className="w-12 flex justify-content-between md:justify-content-end"
+          />
         </div>
       </div>
     </div>
