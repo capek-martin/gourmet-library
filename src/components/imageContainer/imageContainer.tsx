@@ -1,16 +1,16 @@
 import { Galleria } from "primereact/galleria";
-import { RecipeImage } from "../../types/recipe.types";
 import foodPlaceholder from "../../food-placeholder.jpg";
 interface Props {
-  images: RecipeImage[];
+  imgUrls: string[];
   onDelete?: (title: string) => void;
 }
 
-export const ImageContainer = ({ images, onDelete }: Props) => {
-  const itemTemplate = (img: RecipeImage) => {
+export const ImageContainer = ({ imgUrls, onDelete }: Props) => {
+  const itemTemplate = (url: string) => {
+    const imageTitle = url.split("/").pop();
     return (
       <>
-        {onDelete && (
+        {onDelete && imgUrls.length > 0 && (
           <i
             className="pi pi-times"
             style={{
@@ -21,25 +21,20 @@ export const ImageContainer = ({ images, onDelete }: Props) => {
               top: 10,
               color: "red",
             }}
-            onClick={() => onDelete(img.title)}
+            onClick={() => imageTitle && onDelete(imageTitle)}
           />
         )}
-        <img
-          src={img.url}
-          alt={img.title}
-          style={{ maxHeight: "20rem", maxWidth: "30rem", display: "block" }}
-        />
+        <img src={url} alt={imageTitle} className="max-h-20rem max-w-20rem md:max-w-full md:max-h-full" />
       </>
     );
   };
 
-  const ifMultipleImages = images.length > 1 ? true : false;
+  const ifMultipleImages = imgUrls.length > 1 ? true : false;
 
   return (
-    <div className="card m-auto">
+    <div className="card mx-auto shadow-md">
       <Galleria
-        value={images.length > 0 ? images : [foodPlaceholder]}
-        style={{ maxHeight: "50%" }}
+        value={imgUrls.length > 0 ? imgUrls : [foodPlaceholder]}
         showThumbnails={false}
         showIndicators={ifMultipleImages}
         showItemNavigators={ifMultipleImages}

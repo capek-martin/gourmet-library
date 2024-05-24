@@ -7,7 +7,6 @@ export const convertToMinutes = (timeStr: string) => {
     const [hours, minutes] = timeStr.split(":").map(Number);
     return hours * 60 + minutes;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };
@@ -21,6 +20,17 @@ export const convertToTime = (totalMinutes?: number) => {
   const formattedMinutes = String(minutes).padStart(2, "0");
 
   return `${formattedHours}:${formattedMinutes}`;
+};
+
+export const formatTime = (min?: number) => {
+  if (!min) return "unknown";
+  if (min < 60) {
+    return `${min} min`;
+  } else {
+    const hours = Math.floor(min / 60);
+    const minutes = min % 60;
+    return minutes === 0 ? `${hours}h` : `${hours}h ${minutes}min`;
+  }
 };
 
 export const arrayToString = (arr: string[], separator: string) => {

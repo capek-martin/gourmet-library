@@ -191,7 +191,7 @@ export const RecipeForm = ({
             </div>
 
             <ImageContainer
-              images={defaultValues?.images ?? []}
+              imgUrls={defaultValues?.imgUrls ?? []}
               onDelete={onDeleteImage}
             />
           </div>

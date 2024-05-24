@@ -58,10 +58,9 @@ export const ProfileForm = () => {
     <div>
       <h1>User {userInfo?.email}</h1>
 
-      <div className="max-w-full sm:border-1">
+      <div className="max-w-full shadow">
         <DataTable
           value={recipeList}
-          // tableStyle={{ minWidth: "50rem" }}
           header={headerTemplate}
           stripedRows
           tableStyle={{ overflowX: "hidden" }}
@@ -87,7 +86,6 @@ export const ProfileForm = () => {
           <Column sortable field="difficulty" header="Difficulty" />
           <Column
             body={(rowData) => {
-              console.log(rowData.id);
               return (
                 <Button
                   onClick={() => handleDelete(rowData.id)}

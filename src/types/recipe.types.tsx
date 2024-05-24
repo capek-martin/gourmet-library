@@ -8,8 +8,7 @@ export interface RecipeInputs {
   categoryId?: number;
   difficulty?: DifficultyOpt;
   estimatedPrice?: number;
-  // TODO
-  images?: RecipeImage[];
+  imgUrls: string[];
   authorId?: string;
 }
 

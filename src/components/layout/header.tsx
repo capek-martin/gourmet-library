@@ -149,7 +149,10 @@ export const Header = () => {
   return (
     <div className="bg-green-500 text-white flex flex-column w-full align-items-center">
       <div className="w-12 md:w-10 lg:w-8 px-2 md:px-0 md:flex justify-content-between align-items-center">
-        <div className="w-12 md:w-4 align-items-center justify-content-center md:justify-content-start flex gap-2">
+        <div
+          className="w-12 md:w-4 align-items-center justify-content-center md:justify-content-start flex gap-2"
+          onClick={() => navigate(`${paths.HOME}`)}
+        >
           <FontAwesomeIcon size="2x" icon={faUtensils} />
           <h2 className="m-0 p-2">Gourmet library</h2>
           <FontAwesomeIcon size="2x" icon={faUtensils} />

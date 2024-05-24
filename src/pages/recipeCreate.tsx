@@ -71,7 +71,7 @@ export const RecipeCreate = () => {
     categoryId: undefined,
     difficulty: DifficultyOpt.MEDIUM,
     estimatedPrice: 100,
-    images: undefined,
+    imgUrls: [],
     authorId: currentUser.userInfo?.user_id,
   };
 

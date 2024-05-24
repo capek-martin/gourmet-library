@@ -5,5 +5,6 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const recipeImgBucket = "recipe-images";
+// export const recipeImgBucket = "test-bucket";
 
 export default supabase;

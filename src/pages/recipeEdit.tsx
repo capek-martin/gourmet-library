@@ -1,6 +1,6 @@
 import { RecipeForm } from "./recipeForm";
 import { useNavigate, useParams } from "react-router-dom";
-import { Recipe, RecipeImage, RecipeInputs } from "../types/recipe.types";
+import { Recipe, RecipeInputs } from "../types/recipe.types";
 import { SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -18,12 +18,10 @@ import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
 import { paths } from "../utils/core/routerContainer";
 import supabase, { recipeImgBucket } from "../utils/core/supabase";
-import { getUrlsForRecipeImages } from "../utils/app/supabaseUtils";
 import { clearLoading, setLoading } from "../features/loadingSlice";
 
 export const RecipeEdit = () => {
   const { id } = useParams<{ id: string }>();
-  const [images, setImages] = useState<RecipeImage[]>([]);
   const [selectedFile, setSelectedFile] = useState<File[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
@@ -38,7 +36,6 @@ export const RecipeEdit = () => {
 
   useEffect(() => {
     dispatch(fetchRecipes({ numRecords: 100 }));
-    if (id) getUrlsForRecipeImages(id).then((r) => setImages(r));
   }, []);
 
   useEffect(() => {
@@ -50,20 +47,45 @@ export const RecipeEdit = () => {
     if (!id) return;
     dispatch(setLoading());
     try {
-      const response = await dispatch(
+      // Delete the image from the storage
+      const deleteImageResponse = await dispatch(
         deleteRecipeImage({
           recipeId: id,
           title: title,
         })
       );
-      if (response) {
-        location.reload();
-        toast.error("Record deleted.", { ...toastSetting });
-      } else {
-        console.error("Failed to delete image");
+
+      if (!deleteImageResponse) {
+        throw new Error("Failed to delete image from storage");
       }
+
+      // Update the recipe to remove the image URL
+      const updatedImageUrls = recipe?.imgUrls.filter(
+        (url) => !url.includes(title)
+      );
+      const updateRecipeResponse = await dispatch(
+        updateRecipe({
+          id: id,
+          updatedRecipe: {
+            ...recipe,
+            imgUrls: updatedImageUrls || [],
+          },
+        })
+      );
+
+      if (!updateRecipeResponse) {
+        throw new Error("Failed to update recipe with new image URLs");
+      }
+
+      // Show success message
+      toast.success("Image deleted and recipe updated successfully.", {
+        ...toastSetting,
+      });
     } catch (error) {
       console.error("Error deleting image:", error);
+      toast.error("Failed to delete image and update recipe.", {
+        ...toastSetting,
+      });
     } finally {
       dispatch(clearLoading());
     }
@@ -74,26 +96,25 @@ export const RecipeEdit = () => {
   ) => {
     if (!id) return;
     try {
-      // Update recipe data
       dispatch(setLoading());
-      const response = await dispatch(
-        updateRecipe({
-          id: id,
-          updatedRecipe: {
-            ...values,
-            images: undefined,
-            ingredients: arrayToString(values.ingredients as any, ";"),
-          },
-        })
-      );
-
+      let imgUrls = values.imgUrls ?? [];
       // Upload images to Supabase
       if (selectedFile.length > 0) {
         for (const file of selectedFile) {
-          const { error } = await supabase.storage
+          const { data, error } = await supabase.storage
             .from(recipeImgBucket)
             .upload(id + "/" + file.name, file);
 
+          // get public url of uploaded img
+          const publicURL = data
+            ? await supabase.storage
+                .from(recipeImgBucket)
+                .getPublicUrl(data.Key.replace(recipeImgBucket + "/", ""))
+                .publicURL
+            : null;
+
+          // store in arr for recipe edit
+          if (publicURL) imgUrls = [...imgUrls, publicURL];
           if (error) {
             return toast.error(`Failed to upload image: ${error.message}`, {
               ...toastSetting,
@@ -101,6 +122,17 @@ export const RecipeEdit = () => {
           }
         }
       }
+      // Update recipe data
+      const response = await dispatch(
+        updateRecipe({
+          id: id,
+          updatedRecipe: {
+            ...values,
+            imgUrls: imgUrls,
+            ingredients: arrayToString(values.ingredients as any, ";"),
+          },
+        })
+      );
 
       if (updateRecipe.fulfilled.match(response)) {
         toast.success("Recipe updated", { ...toastSetting });
@@ -119,7 +151,7 @@ export const RecipeEdit = () => {
   return (
     <RecipeForm
       onSubmit={handleOnSubmit}
-      defaultValues={{ ...recipe, images: images }}
+      defaultValues={recipe}
       setSelectedFile={setSelectedFile}
       onDeleteImage={deleteImage}
     />

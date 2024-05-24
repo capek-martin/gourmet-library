@@ -2,7 +2,7 @@ import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import {
@@ -16,13 +16,11 @@ import { paths } from "../utils/core/routerContainer";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
-import { getUrlsForRecipeImages } from "../utils/app/supabaseUtils";
-import { RecipeImage } from "../types/recipe.types";
 import { ImageContainer } from "../components/imageContainer/imageContainer";
+import { formatTime } from "../utils/app/utils";
 
 export const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [images, setImages] = useState<RecipeImage[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -33,7 +31,6 @@ export const RecipeDetail = () => {
 
   useEffect(() => {
     dispatch(fetchRecipes({ numRecords: 100 }));
-    if (id) getUrlsForRecipeImages(id).then((r) => setImages(r));
   }, []);
 
   const handleEditRedirect = () => {
@@ -104,7 +101,7 @@ export const RecipeDetail = () => {
                 <b>Category:</b> {recipe?.categoryName}
               </p>
               <p>
-                <b>Prep Time:</b> {recipe?.prepTime}
+                <b>Prep Time:</b> {formatTime(recipe?.prepTime)}
               </p>
               <p>
                 <b>Difficulty:</b> {recipe?.difficulty}
@@ -135,9 +132,11 @@ export const RecipeDetail = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 md:col-6 flex items-center justify-center m-auto">
-            <ImageContainer images={images} />
+
+          <div className="col-12 md:col-6 flex">
+            <ImageContainer imgUrls={recipe.imgUrls ?? []} />
           </div>
+
           <div className="col-12">
             <Divider />
             <p>
