@@ -19,6 +19,7 @@ import { toastSetting } from "../utils/app/toastSetting";
 import { ImageContainer } from "../components/imageContainer/imageContainer";
 import { formatTime } from "../utils/app/utils";
 import { fetchCategories } from "../features/categorySlice";
+import { RecipeRating } from "../components/recipeRatings/recipeRating";
 
 export const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +27,7 @@ export const RecipeDetail = () => {
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const { categories } = useSelector((state: RootState) => state.categories);
+
   const recipe = useSelector(
     (state: RootState) => id && selectRecipeById(state, id)
   );
@@ -96,6 +98,7 @@ export const RecipeDetail = () => {
         <div className="flex flex-wrap justify-content-between">
           <div className="col-12 md:col-6 border">
             <div className="recipe-details">
+              <RecipeRating recipe={recipe} />
               <p>
                 <b>Description:</b> {recipe?.description}
               </p>

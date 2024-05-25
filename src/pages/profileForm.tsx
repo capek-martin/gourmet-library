@@ -30,6 +30,7 @@ export const ProfileForm = () => {
 
   const onDelete = async (id: string) => {
     await dispatch(deleteRecipe(id)).then(() => {
+      dispatch(fetchRecipes({ numRecords: 100, authorId: userInfo?.user_id }));
       toast.error("Record deleted.", { ...toastSetting });
     });
   };

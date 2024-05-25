@@ -9,13 +9,13 @@ import { RecipeCard } from "../components/recipeCard/recipeCard";
 import { RecipeFilters } from "./recipeFilters";
 import { RecipeFilters as Filters } from "../types/recipe.types";
 import { fetchCategories } from "../features/categorySlice";
+import { fetchAllRecipesAvgRating } from "../features/ratingSlice";
 
 export const RecipesPage = () => {
   const params = new URLSearchParams(location.search);
   const { recipes: recipeList } = useSelector(
     (state: RootState) => state.recipes
   );
-
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
 
@@ -31,6 +31,7 @@ export const RecipesPage = () => {
       })
     );
     dispatch(fetchCategories());
+    dispatch(fetchAllRecipesAvgRating());
   }, [dispatch, location.search]);
 
   useEffect(() => {

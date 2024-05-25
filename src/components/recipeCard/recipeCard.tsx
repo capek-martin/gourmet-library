@@ -3,16 +3,26 @@ import { Recipe } from "../../types/recipe.types";
 import { paths } from "../../utils/core/routerContainer";
 import foodPlaceholder from "../../food-placeholder.jpg";
 import { Rating } from "primereact/rating";
+import { RootState } from "../../store/store";
+import { useSelector } from "react-redux";
 
 interface Props {
   recipe: Recipe;
 }
 
 export const RecipeCard = ({ recipe }: Props) => {
+  const { averageRatings } = useSelector((state: RootState) => state.ratings);
   const navigate = useNavigate();
 
   const handleDetailRedirect = (id: string) => {
     navigate(`${paths.RECIPES}/${id}`);
+  };
+
+  const getAvgRating = () => {
+    if (!averageRatings || !recipe || !recipe.id) return 0;
+    const ratingInfo = averageRatings[recipe.id];
+    if (!ratingInfo) return 0;
+    return ratingInfo.averageRating ?? 0;
   };
 
   return (
@@ -33,10 +43,10 @@ export const RecipeCard = ({ recipe }: Props) => {
         <p className="text-gray-700 text-base">{recipe.description}</p>
         <p className="m-auto text-center">
           <Rating
-            value={3.5}
-            // onChange={(e) => setValue(e.value)}
+            value={getAvgRating()}
             cancel={false}
             className="justify-content-center"
+            readOnly
           />
         </p>
       </div>
