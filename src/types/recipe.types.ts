@@ -13,7 +13,7 @@ export interface RecipeInputs {
 }
 
 export interface Recipe extends RecipeInputs {
-  id?: string;
+  id: string;
   categoryName?: string;
   authorEmail?: string;
 }
@@ -44,4 +44,14 @@ export interface RecipeFilters {
   ingredients: string;
   difficulty: string | null;
   categoryId: number | null;
+  favouritesOnly: boolean;
+  minRating: number | null;
 }
+
+export const defaultFilter: RecipeFilters = {
+  ingredients: "",
+  difficulty: null,
+  categoryId: null,
+  favouritesOnly: false,
+  minRating: null,
+};

@@ -52,7 +52,7 @@ export const Header = () => {
         }, */
         {
           id: "favourites",
-          label: "Favorites",
+          label: "Favourites",
           icon: "pi pi-heart",
           command: () => navigate(paths.RECIPES),
           visible: isLoggedIn,

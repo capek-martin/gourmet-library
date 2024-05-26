@@ -74,7 +74,7 @@ export const RecipeRating = ({ recipe, readOnly = false }: Props) => {
         cancel={false}
         onChange={(r) => rateRecipe(r.value as number)}
         readOnly={!userInfo || readOnly}
-        title={`You rated ${currentRating}`}
+        title={currentRating ? `You rated ${currentRating}` : `No rating yet`}
       />
       <span className="text-xs">{getAvgRating()}</span>
     </div>

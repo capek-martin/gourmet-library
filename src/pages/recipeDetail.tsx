@@ -151,7 +151,7 @@ export const RecipeDetail = () => {
             <Divider />
             <div className="text-center">
               <Button
-                label="Add to Favorites"
+                label="Add to Favourites"
                 icon="pi pi-heart"
                 className="p-button-raised p-button-rounded"
               />

@@ -1,6 +1,6 @@
 import { RecipeForm } from "./recipeForm";
 import { useNavigate, useParams } from "react-router-dom";
-import { Recipe, RecipeInputs } from "../types/recipe.types";
+import { RecipeInputs } from "../types/recipe.types";
 import { SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -92,7 +92,7 @@ export const RecipeEdit = () => {
   };
 
   const handleOnSubmit: SubmitHandler<RecipeInputs> = async (
-    values: Recipe
+    values: RecipeInputs
   ) => {
     if (!id) return;
     try {

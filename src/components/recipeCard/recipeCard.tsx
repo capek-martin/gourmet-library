@@ -5,29 +5,34 @@ import foodPlaceholder from "../../food-placeholder.jpg";
 import { Rating } from "primereact/rating";
 import { RootState } from "../../store/store";
 import { useSelector } from "react-redux";
+import { Button } from "primereact/button";
+import { MouseEvent, useState } from "react";
+import { RecipeAvgRating } from "../../types/rating.types";
 
 interface Props {
   recipe: Recipe;
+  avgRating: RecipeAvgRating | null;
+  onToggleFavourite: (recipeId: string) => void;
 }
 
-export const RecipeCard = ({ recipe }: Props) => {
-  const { averageRatings } = useSelector((state: RootState) => state.ratings);
+export const RecipeCard = ({ recipe, avgRating, onToggleFavourite }: Props) => {
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const { favourites } = useSelector((state: RootState) => state.favourites);
   const navigate = useNavigate();
 
   const handleDetailRedirect = (id: string) => {
     navigate(`${paths.RECIPES}/${id}`);
   };
 
-  const getAvgRating = () => {
-    if (!averageRatings || !recipe || !recipe.id) return 0;
-    const ratingInfo = averageRatings[recipe.id];
-    if (!ratingInfo) return 0;
-    return ratingInfo.averageRating ?? 0;
+  const handleButtonClick = (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    onToggleFavourite(recipe.id);
   };
 
   return (
     <div
-      className="bg-white border-round-md text-center p-0 shadow-3 hover:shadow-5 cursor-pointer w-12 md:w-12rem lg:w-15rem"
+      className="bg-white border-round-md text-center p-0 shadow-3 hover:shadow-5 cursor-pointer w-12 md:w-12rem lg:w-15rem relative"
       key={recipe.id}
       onClick={() => recipe.id && handleDetailRedirect(recipe.id)}
     >
@@ -39,11 +44,36 @@ export const RecipeCard = ({ recipe }: Props) => {
         />
       </div>
       <div className="px-6 py-4 mt-auto">
+        {userInfo && (
+          <div
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <Button
+              rounded
+              text
+              raised
+              severity="danger"
+              aria-label="Favorite"
+              className="absolute top-0 right-0 mt-3 mr-3 bg-white shadow-4 p-2"
+              onClick={(e: any) => handleButtonClick(e)}
+            >
+              <i
+                className={`pi ${
+                  isHovered || favourites.includes(recipe.id)
+                    ? "pi-heart-fill"
+                    : "pi-heart"
+                }`}
+              ></i>
+            </Button>
+          </div>
+        )}
+
         <div className="font-bold text-xl mb-2">{recipe.title}</div>
         <p className="text-gray-700 text-base">{recipe.description}</p>
         <p className="m-auto text-center">
           <Rating
-            value={getAvgRating()}
+            value={avgRating?.averageRating ?? 0}
             cancel={false}
             className="justify-content-center"
             readOnly

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Recipe } from "../types/recipe.types";
+import { Recipe, RecipeInputs } from "../types/recipe.types";
 import { RootState } from "../store/store";
 import supabase, { recipeImgBucket } from "../utils/core/supabase";
 import { camelToSnake, snakeToCamel } from "../utils/app/supabaseUtils";
@@ -67,7 +67,7 @@ export const fetchRecipeById = createAsyncThunk<Recipe, string>(
 
 export const addRecipe = createAsyncThunk(
   "recipes/addRecipe",
-  async (newRecipe: Recipe) => {
+  async (newRecipe: RecipeInputs) => {
     const snakeCaseRecipe = camelToSnake(newRecipe);
     const { data, error } = await supabase
       .from<Recipe>("recipes")
@@ -82,7 +82,13 @@ export const addRecipe = createAsyncThunk(
 
 export const updateRecipe = createAsyncThunk(
   "recipes/updateRecipe",
-  async ({ id, updatedRecipe }: { id: string; updatedRecipe: Recipe }) => {
+  async ({
+    id,
+    updatedRecipe,
+  }: {
+    id: string;
+    updatedRecipe: RecipeInputs;
+  }) => {
     const snakeCaseRecipe = camelToSnake(updatedRecipe);
     const { data, error } = await supabase
       .from<Recipe>("recipes")
