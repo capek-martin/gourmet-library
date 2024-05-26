@@ -50,19 +50,19 @@ export const Header = () => {
             navigate(`${paths.RECIPES}?authorId=${userInfo?.user_id}`),
           visible: isLoggedIn,
         }, */
-        {
+        /* {
           id: "favourites",
           label: "Favourites",
           icon: "pi pi-heart",
           command: () => navigate(paths.RECIPES),
           visible: isLoggedIn,
-        },
+        }, */
         {
           id: "new-recipe",
           label: "New Recipe",
           icon: "pi pi-calendar-plus",
-          command: () => navigate(`${paths.RECIPES}/new`),
-          visible: isLoggedIn,
+          command: () =>
+            navigate(isLoggedIn ? `${paths.RECIPES}/new` : `${paths.LOGIN}`),
         },
       ],
     },

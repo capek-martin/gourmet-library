@@ -40,7 +40,6 @@ export const toggleFavorite = createAsyncThunk(
   "favourite/toggleFavorite",
   async ({ userId, recipeId }: any, { getState, rejectWithValue }: any) => {
     try {
-      console.log(getState());
       const isFavorite = getState().favourites.favourites.includes(recipeId);
       if (isFavorite) {
         const { error } = await supabase

@@ -119,7 +119,7 @@ export const RecipesPage = () => {
 
   return (
     <>
-      <div className="p-grid p-dir-col">
+      <div className="p-grid p-dir-col pb-5">
         <div>
           <header className="header">
             <h1>Latest recipes</h1>
