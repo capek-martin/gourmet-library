@@ -21,7 +21,7 @@ import { ImageContainer } from "../components/imageContainer/imageContainer";
 interface Props {
   onSubmit: SubmitHandler<RecipeInputs>;
   defaultValues?: RecipeInputs;
-  setSelectedFile: Dispatch<any>;
+  setSelectedFile?: Dispatch<any>;
   onDeleteImage?: (title: string) => void;
 }
 
@@ -34,7 +34,7 @@ export const RecipeForm = ({
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const categoryList = useSelector(selectCategories);
   const { handleSubmit, reset, register, setValue } = useForm<RecipeInputs>();
-
+  const isNew = window.location.href.includes("/new");
   const [difficulty, setDifficulty] = useState<DifficultyOpt>(
     defaultValues?.difficulty ?? DifficultyOpt.MEDIUM
   );
@@ -69,10 +69,9 @@ export const RecipeForm = ({
 
   const inputCss = `w-full h-2.5rem`;
   const containerCss = `field col-12 m-0`;
-
   return (
     <Card
-      title={defaultValues ? "Edit recipe" : "New recipe"}
+      title={isNew ? "New recipe" : "Edit recipe"}
       className="my-3 border-round-lg border-noround-bottom"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="">
@@ -180,15 +179,17 @@ export const RecipeForm = ({
           </div>
           {/* p2 */}
           <div className="md:w-6 mx-2">
-            <div className="col-2">
-              <input
-                type="file"
-                name="images"
-                accept="image/*"
-                multiple
-                onChange={(e) => setSelectedFile(e.target.files)}
-              />
-            </div>
+            {setSelectedFile && (
+              <div className="col-2">
+                <input
+                  type="file"
+                  name="images"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => setSelectedFile(e.target.files)}
+                />
+              </div>
+            )}
 
             <ImageContainer
               imgUrls={defaultValues?.imgUrls ?? []}

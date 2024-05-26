@@ -29,6 +29,7 @@ export const RecipeCard = ({ recipe, avgRating, onToggleFavourite }: Props) => {
     e.stopPropagation();
     onToggleFavourite(recipe.id);
   };
+  console.log(recipe?.imgUrls[0], "recipe?.imgUrls[0]");
 
   return (
     <div
@@ -39,7 +40,9 @@ export const RecipeCard = ({ recipe, avgRating, onToggleFavourite }: Props) => {
       <div className="relative h-15rem w-full">
         <img
           className="h-full w-full object-contain p-2"
-          src={recipe?.imgUrls ? recipe?.imgUrls[0] : foodPlaceholder}
+          src={
+            recipe?.imgUrls.length > 0 ? recipe?.imgUrls[0] : foodPlaceholder
+          }
           alt={recipe.title}
         />
       </div>

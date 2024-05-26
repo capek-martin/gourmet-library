@@ -10,13 +10,10 @@ import { toastSetting } from "../utils/app/toastSetting";
 import { RootState } from "../store/store";
 import { paths } from "../utils/core/routerContainer";
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { useState } from "react";
-import supabase, { recipeImgBucket } from "../utils/core/supabase";
 import { clearLoading, setLoading } from "../features/loadingSlice";
 
 export const RecipeCreate = () => {
   const navigate = useNavigate();
-  const [selectedFile, setSelectedFile] = useState<any>(null);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const currentUser = useSelector((state: RootState) => state.user);
   const handleOnSubmit: SubmitHandler<RecipeInputs> = async (
@@ -24,7 +21,7 @@ export const RecipeCreate = () => {
   ) => {
     try {
       dispatch(setLoading());
-      const response = await dispatch(
+      await dispatch(
         addRecipe({
           ...values,
           categoryId: values.categoryId,
@@ -32,29 +29,10 @@ export const RecipeCreate = () => {
           ingredients: arrayToString(values.ingredients as any, ";"),
           authorId: currentUser.userInfo?.user_id,
         })
-      );
-      if (addRecipe.fulfilled.match(response)) {
-        // Upload images to Supabase
-        if (selectedFile.length > 0) {
-          for (const file of selectedFile) {
-            const { error } = await supabase.storage
-              .from(recipeImgBucket)
-              .upload(response.payload.id + "/" + file.name, file);
-
-            if (error) {
-              toast.error(`Failed to upload image: ${error.message}`, {
-                ...toastSetting,
-              });
-              return;
-            }
-          }
-        }
-
+      ).then((r) => {
         toast.success("Recipe created", { ...toastSetting });
-        navigate(paths.HOME);
-      } else if (addRecipe.rejected.match(response)) {
-        toast.error("Failed to create recipe", { ...toastSetting });
-      }
+        navigate(`${paths.RECIPES}/edit/${r.payload.id}`);
+      });
     } catch (err) {
       toast.error(`${err}`, { ...toastSetting });
     } finally {
@@ -75,11 +53,5 @@ export const RecipeCreate = () => {
     authorId: currentUser.userInfo?.user_id,
   };
 
-  return (
-    <RecipeForm
-      onSubmit={handleOnSubmit}
-      defaultValues={defaultValues}
-      setSelectedFile={setSelectedFile}
-    />
-  );
+  return <RecipeForm onSubmit={handleOnSubmit} defaultValues={defaultValues} />;
 };
