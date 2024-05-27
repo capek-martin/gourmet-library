@@ -1,31 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import { useEffect } from "react";
 import { deleteRecipe, fetchRecipes } from "../features/recipeSlice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { toastSetting } from "../utils/app/toastSetting";
-import { useNavigate } from "react-router-dom";
-import { paths } from "../utils/core/routerContainer";
-import { Loader } from "../components/loader/loader";
+import { RecipesTable } from "../components/recipesTable/recipesTable";
+import { TabView, TabPanel } from "primereact/tabview";
+import { fetchFavoriteRecipes } from "../features/favouritesSlice";
 
 export const ProfileForm = () => {
-  const navigate = useNavigate();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
-  const {
-    recipes: recipeList,
-    loading,
-    error,
-  } = useSelector((state: RootState) => state.recipes);
+  const { recipes } = useSelector((state: RootState) => state.recipes);
+  const { favourites } = useSelector((state: RootState) => state.favourites);
 
   useEffect(() => {
     dispatch(fetchRecipes({ numRecords: 100, authorId: userInfo?.user_id }));
+    if (userInfo) dispatch(fetchFavoriteRecipes(userInfo?.user_id));
   }, []);
 
   const onDelete = async (id: string) => {
@@ -46,59 +40,25 @@ export const ProfileForm = () => {
     });
   };
 
-  const headerTemplate = (
-    <div className="flex flex-wrap align-items-center justify-content-between gap-2">
-      <span className="text-xl text-900 font-bold">My recipes</span>
-    </div>
-  );
-
-  if (loading) return <Loader />;
-  if (error) return <div>Error: {error}</div>;
-
   return (
     <div>
       <h1>User {userInfo?.email}</h1>
-
-      <div className="max-w-full shadow">
-        <DataTable
-          value={recipeList}
-          header={headerTemplate}
-          stripedRows
-          tableStyle={{ overflowX: "hidden" }}
-          scrollable
-        >
-          <Column
-            sortable
-            field="title"
-            header="Title"
-            body={(item) => (
-              <a
-                onClick={() => navigate(`${paths.RECIPES}/${item.id}`)}
-                className="text-blue-500 no-underline"
-              >
-                {item.title}
-              </a>
-            )}
-          />
-          <Column field="description" header="Description" />
-          <Column sortable field="categoryName" header="Category" />
-          <Column sortable field="prepTime" header="Preparation time" />
-          <Column sortable field="estimatedPrice" header="Estimated price" />
-          <Column sortable field="difficulty" header="Difficulty" />
-          <Column
-            body={(rowData) => {
-              return (
-                <Button
-                  onClick={() => handleDelete(rowData.id)}
-                  icon="pi pi-trash"
-                  className="p-button-rounded p-button-danger"
-                />
-              );
-            }}
-            style={{ width: "10%" }}
-          />
-        </DataTable>
+      <div className="card">
+        <TabView>
+          <TabPanel header="My recipes">
+            <RecipesTable onDelete={handleDelete} recipeList={recipes} />
+          </TabPanel>
+          <TabPanel header="Favourite recipes">
+            <RecipesTable
+              recipeList={recipes.filter((r) => favourites.includes(r.id))}
+            />
+          </TabPanel>
+          <TabPanel header="Account settings">
+            <p className="m-0">TODO</p>
+          </TabPanel>
+        </TabView>
       </div>
+
       <ConfirmDialog />
     </div>
   );

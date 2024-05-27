@@ -34,7 +34,7 @@ export const RecipesPage = () => {
     const authorIdParam = params.get("authorId");
     const sizeParam = params.get("size");
 
-    const size = sizeParam ? Number(sizeParam) || 100 : 100;
+    const size = sizeParam ? Number(sizeParam) : 100;
     dispatch(
       fetchRecipes({
         authorId: authorIdParam ?? undefined,
