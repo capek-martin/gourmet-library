@@ -20,9 +20,14 @@ import { ImageContainer } from "../components/imageContainer/imageContainer";
 import { formatTime } from "../utils/app/utils";
 import { fetchCategories } from "../features/categorySlice";
 import { RecipeRating } from "../components/recipeRatings/recipeRating";
+import {
+  fetchFavoriteRecipes,
+  toggleFavorite,
+} from "../features/favouritesSlice";
 
 export const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { favourites } = useSelector((state: RootState) => state.favourites);
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -31,10 +36,11 @@ export const RecipeDetail = () => {
   const recipe = useSelector(
     (state: RootState) => id && selectRecipeById(state, id)
   );
-
+  const isFavourite = recipe && favourites.includes(recipe.id);
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchRecipes({ numRecords: 100 }));
+    if (userInfo) dispatch(fetchFavoriteRecipes(userInfo?.user_id));
   }, []);
 
   const handleEditRedirect = () => {
@@ -57,6 +63,25 @@ export const RecipeDetail = () => {
       defaultFocus: "reject",
       acceptClassName: "p-button-danger",
       accept: onDelete,
+    });
+  };
+
+  const handleToggleFavourite = () => {
+    if (!userInfo?.user_id || !recipe) return;
+    dispatch(
+      toggleFavorite({ recipeId: recipe.id, userId: userInfo?.user_id })
+    ).then(() => {
+      dispatch(fetchFavoriteRecipes(userInfo?.user_id));
+      toast.success(
+        `${
+          favourites.includes(recipe.id)
+            ? "Removed from favourites"
+            : "Added to favourites"
+        }`,
+        {
+          ...toastSetting,
+        }
+      );
     });
   };
 
@@ -151,9 +176,12 @@ export const RecipeDetail = () => {
             <Divider />
             <div className="text-center">
               <Button
-                label="Add to Favourites"
+                label={
+                  isFavourite ? "Remove from favourites" : "Add to favourites"
+                }
                 icon="pi pi-heart"
                 className="p-button-raised p-button-rounded"
+                onClick={handleToggleFavourite}
               />
             </div>
           </div>
