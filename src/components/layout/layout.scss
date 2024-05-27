@@ -64,3 +64,7 @@ $text-color: #333;
 .p-tabview .p-tabview-panels {
   padding: 0;
 }
+
+.p-rating .p-rating-item.p-rating-item-active .p-rating-icon {
+  color: rgba(255, 157, 0, 0.805);
+}
