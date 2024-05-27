@@ -30,6 +30,9 @@ $text-color: #333;
 .p-menuitem {
   background-color: $primary-color;
 }
+.p-menuitem-content {
+  white-space: nowrap;
+}
 
 .p-menuitem-content:hover,
 .p-menuitem-content:active {

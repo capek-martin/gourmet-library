@@ -23,6 +23,14 @@ export const Header = () => {
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipeList);
   const isLoggedIn = !!userInfo?.user_id;
 
+  const handleRandomRecipeClick = () => {
+    if (recipeList.length > 0) {
+      const randomIndex = Math.floor(Math.random() * recipeList.length);
+      const randomRecipe = recipeList[randomIndex];
+      navigate(`${paths.RECIPES}/${randomRecipe.id}`);
+    }
+  };
+
   const items = [
     {
       id: "home",
@@ -50,13 +58,13 @@ export const Header = () => {
             navigate(`${paths.RECIPES}?authorId=${userInfo?.user_id}`),
           visible: isLoggedIn,
         }, */
-        /* {
-          id: "favourites",
-          label: "Favourites",
-          icon: "pi pi-heart",
-          command: () => navigate(paths.RECIPES),
+        {
+          id: "randomRecipe",
+          label: "Hungry & clueless?",
+          icon: "pi pi-sparkles",
+          command: () => handleRandomRecipeClick(),
           visible: isLoggedIn,
-        }, */
+        },
         {
           id: "new-recipe",
           label: "New Recipe",
