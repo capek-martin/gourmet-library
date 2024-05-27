@@ -30,7 +30,7 @@ export const RecipeFilters = ({ onFilterChange }: Props) => {
       return;
     }
     const value =
-      field === "favouritesOnly"
+      field === "favouritesOnly" || field === "withImagesOnly"
         ? e.checked
         : e.target
         ? e.target.value
@@ -86,17 +86,28 @@ export const RecipeFilters = ({ onFilterChange }: Props) => {
 
         {userInfo && (
           <div className="w-12 flex align-items-center">
-            <label htmlFor="favOnly" className="mr-2">
-              Show only favourites
-            </label>
             <Checkbox
               inputId="favOnly"
               name="favOnly"
               onChange={(e) => handleFilterChange(e, "favouritesOnly")}
               checked={filters.favouritesOnly}
+              className="mr-2"
             />
+            <label htmlFor="favOnly">Show only favourites</label>
           </div>
         )}
+        <div className="w-12 flex align-items-center">
+          <Checkbox
+            inputId="withImagesOnly"
+            name="withImagesOnly"
+            onChange={(e) => handleFilterChange(e, "withImagesOnly")}
+            checked={filters.withImagesOnly}
+            className="mr-2"
+          />
+          <label htmlFor="withImagesOnly" className="mr-2">
+            Show only with images
+          </label>
+        </div>
         <div className="w-12 block">
           <label htmlFor="ratingFilter" className="mr-2">
             Minimal rating

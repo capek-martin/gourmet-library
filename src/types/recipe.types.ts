@@ -45,6 +45,7 @@ export interface RecipeFilters {
   difficulty: string | null;
   categoryId: number | null;
   favouritesOnly: boolean;
+  withImagesOnly: boolean;
   minRating: number | null;
 }
 
@@ -53,5 +54,6 @@ export const defaultFilter: RecipeFilters = {
   difficulty: null,
   categoryId: null,
   favouritesOnly: false,
+  withImagesOnly: false,
   minRating: null,
 };

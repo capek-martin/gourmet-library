@@ -103,6 +103,12 @@ export const RecipesPage = () => {
       );
     }
 
+    if (filters.withImagesOnly) {
+      updatedRecipes = updatedRecipes.filter(
+        (recipe) => recipe.imgUrls.length > 0
+      );
+    }
+
     if (filters.minRating && averageRatings) {
       updatedRecipes = updatedRecipes.filter((recipe) => {
         const tmpRecipe = Object.keys(averageRatings).find(
