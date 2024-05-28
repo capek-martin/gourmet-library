@@ -29,7 +29,6 @@ export const RecipeCard = ({ recipe, avgRating, onToggleFavourite }: Props) => {
     e.stopPropagation();
     onToggleFavourite(recipe.id);
   };
-  console.log(recipe?.imgUrls[0], "recipe?.imgUrls[0]");
 
   return (
     <div

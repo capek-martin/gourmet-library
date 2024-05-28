@@ -12,13 +12,11 @@ export const ImageContainer = ({ imgUrls, onDelete }: Props) => {
     return (
       <>
         {onDelete && imgUrls.length > 0 && (
-          <>
-            <Button
-              onClick={() => imageTitle && onDelete(imageTitle)}
-              icon="pi pi-trash"
-              className="p-button-rounded p-button-danger absolute top-0 right-0 m-2"
-            />
-          </>
+          <Button
+            onClick={() => imageTitle && onDelete(imageTitle)}
+            icon="pi pi-trash"
+            className="p-button-rounded p-button-danger absolute top-0 right-0 m-2"
+          />
         )}
         <img
           src={url}

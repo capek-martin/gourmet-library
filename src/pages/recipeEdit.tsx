@@ -29,7 +29,6 @@ export const RecipeEdit = () => {
     (state: RootState) => state.recipes
   );
 
-  // TODO
   const recipe = useSelector((state: RootState) =>
     selectRecipeById(state, id!)
   );
@@ -103,7 +102,7 @@ export const RecipeEdit = () => {
         for (const file of selectedFile) {
           const { data, error } = await supabase.storage
             .from(recipeImgBucket)
-            .upload(id + "/" + file.name, file);
+            .upload(id + "/" + file.name + "_" + imgUrls.length, file);
 
           // get public url of uploaded img
           const publicURL = data
