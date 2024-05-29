@@ -12,7 +12,7 @@ import { fetchAllRecipesAvgRating } from "../features/ratingSlice";
 import {
   fetchFavoriteRecipes,
   toggleFavorite,
-} from "../features/favouritesSlice";
+} from "../features/favoritesSlice";
 import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
 
@@ -21,7 +21,7 @@ export const RecipesPage = () => {
   const { recipes: recipeList } = useSelector(
     (state: RootState) => state.recipes
   );
-  const { favourites } = useSelector((state: RootState) => state.favourites);
+  const { favorites } = useSelector((state: RootState) => state.favorites);
   const { averageRatings } = useSelector((state: RootState) => state.ratings);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
@@ -51,7 +51,7 @@ export const RecipesPage = () => {
 
   useEffect(() => {
     handleFilterChange(currentFilters);
-  }, [favourites]);
+  }, [favorites]);
 
   const handleToggleFavourite = (recipeId: string) => {
     if (!userInfo?.user_id) return;
@@ -61,9 +61,9 @@ export const RecipesPage = () => {
       dispatch(fetchFavoriteRecipes(userInfo?.user_id));
       toast.success(
         `${
-          favourites.includes(recipeId)
-            ? "Removed from favourites"
-            : "Added to favourites"
+          favorites.includes(recipeId)
+            ? "Removed from favorites"
+            : "Added to favorites"
         }`,
         {
           ...toastSetting,
@@ -96,9 +96,9 @@ export const RecipesPage = () => {
       );
     }
 
-    if (filters.favouritesOnly) {
+    if (filters.favoritesOnly) {
       updatedRecipes = updatedRecipes.filter(
-        (recipe) => recipe.id && favourites.includes(recipe.id)
+        (recipe) => recipe.id && favorites.includes(recipe.id)
       );
     }
 

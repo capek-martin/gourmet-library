@@ -8,7 +8,7 @@ import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { toastSetting } from "../utils/app/toastSetting";
 import { RecipesTable } from "../components/recipesTable/recipesTable";
 import { TabView, TabPanel } from "primereact/tabview";
-import { fetchFavoriteRecipes } from "../features/favouritesSlice";
+import { fetchFavoriteRecipes } from "../features/favoritesSlice";
 import { fetchCategories } from "../features/categorySlice";
 
 export const ProfileForm = () => {
@@ -16,7 +16,7 @@ export const ProfileForm = () => {
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
   const { recipes } = useSelector((state: RootState) => state.recipes);
-  const { favourites } = useSelector((state: RootState) => state.favourites);
+  const { favorites } = useSelector((state: RootState) => state.favorites);
 
   useEffect(() => {
     dispatch(fetchRecipes({ numRecords: 100, authorId: userInfo?.user_id }));
@@ -51,7 +51,7 @@ export const ProfileForm = () => {
         </TabPanel>
         <TabPanel header="Favourite recipes">
           <RecipesTable
-            recipeList={recipes.filter((r) => favourites.includes(r.id))}
+            recipeList={recipes.filter((r) => favorites.includes(r.id))}
           />
         </TabPanel>
         <TabPanel header="Account settings">

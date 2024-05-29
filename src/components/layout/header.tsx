@@ -153,7 +153,7 @@ export const Header = () => {
           onClick={() => navigate(`${paths.HOME}`)}
         >
           <FontAwesomeIcon size="2x" icon={faUtensils} />
-          <h2 className="m-0 p-2">Gourmet library</h2>
+          <h2 className="m-0 p-2">Gourmet Library</h2>
           <FontAwesomeIcon size="2x" icon={faUtensils} />
         </div>
         <div className="mx-auto w-10 md:w-8">

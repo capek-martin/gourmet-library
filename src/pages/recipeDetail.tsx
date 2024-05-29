@@ -22,11 +22,11 @@ import { RecipeRating } from "../components/recipeRatings/recipeRating";
 import {
   fetchFavoriteRecipes,
   toggleFavorite,
-} from "../features/favouritesSlice";
+} from "../features/favoritesSlice";
 
 export const RecipeDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { favourites } = useSelector((state: RootState) => state.favourites);
+  const { favorites } = useSelector((state: RootState) => state.favorites);
   const navigate = useNavigate();
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -35,7 +35,7 @@ export const RecipeDetail = () => {
   const recipe = useSelector(
     (state: RootState) => id && selectRecipeById(state, id)
   );
-  const isFavourite = recipe && favourites.includes(recipe.id);
+  const isFavourite = recipe && favorites.includes(recipe.id);
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchRecipes({ numRecords: 100 }));
@@ -73,9 +73,9 @@ export const RecipeDetail = () => {
       dispatch(fetchFavoriteRecipes(userInfo?.user_id));
       toast.success(
         `${
-          favourites.includes(recipe.id)
-            ? "Removed from favourites"
-            : "Added to favourites"
+          favorites.includes(recipe.id)
+            ? "Removed from favorites"
+            : "Added to favorites"
         }`,
         {
           ...toastSetting,
@@ -180,7 +180,7 @@ export const RecipeDetail = () => {
           <div className="text-center">
             <Button
               label={
-                isFavourite ? "Remove from favourites" : "Add to favourites"
+                isFavourite ? "Remove from favorites" : "Add to favorites"
               }
               icon="pi pi-heart"
               className="p-button-raised p-button-rounded"

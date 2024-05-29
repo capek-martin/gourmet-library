@@ -5,13 +5,13 @@ import supabase from "../utils/core/supabase";
 // get rid of "any"
 
 interface FavoriteState {
-  favourites: string[];
+  favorites: string[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: FavoriteState = {
-  favourites: [],
+  favorites: [],
   loading: false,
   error: null,
 };
@@ -22,7 +22,7 @@ export const fetchFavoriteRecipes = createAsyncThunk(
   async (userId: string) => {
     try {
       const { data, error } = await supabase
-        .from("favourites")
+        .from("favorites")
         .select("recipe_id")
         .eq("user_id", userId);
       if (error) {
@@ -40,17 +40,17 @@ export const toggleFavorite = createAsyncThunk(
   "favourite/toggleFavorite",
   async ({ userId, recipeId }: any, { getState, rejectWithValue }: any) => {
     try {
-      const isFavorite = getState().favourites.favourites.includes(recipeId);
+      const isFavorite = getState().favorites.favorites.includes(recipeId);
       if (isFavorite) {
         const { error } = await supabase
-          .from("favourites")
+          .from("favorites")
           .delete()
           .match({ user_id: userId, recipe_id: recipeId });
         if (error) throw error;
         return { recipeId, isFavorite: false };
       } else {
         const { error } = await supabase
-          .from("favourites")
+          .from("favorites")
           .insert([{ user_id: userId, recipe_id: recipeId }]);
         if (error) throw error;
         return { recipeId, isFavorite: true };
@@ -74,7 +74,7 @@ const favoriteRecipesSlice = createSlice({
       })
       .addCase(fetchFavoriteRecipes.fulfilled, (state, action) => {
         state.loading = false;
-        state.favourites = action.payload;
+        state.favorites = action.payload;
       })
       .addCase(fetchFavoriteRecipes.rejected, (state: any, action) => {
         state.loading = false;
@@ -83,9 +83,9 @@ const favoriteRecipesSlice = createSlice({
       .addCase(toggleFavorite.fulfilled, (state, action) => {
         const { recipeId, isFavorite } = action.payload;
         if (isFavorite) {
-          state.favourites.push(recipeId);
+          state.favorites.push(recipeId);
         } else {
-          state.favourites = state.favourites.filter((id) => id !== recipeId);
+          state.favorites = state.favorites.filter((id) => id !== recipeId);
         }
       })
       .addCase(toggleFavorite.rejected, (state: any, action) => {

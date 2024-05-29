@@ -19,7 +19,7 @@ interface Props {
 export const RecipeCard = ({ recipe, avgRating, onToggleFavourite }: Props) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
-  const { favourites } = useSelector((state: RootState) => state.favourites);
+  const { favorites } = useSelector((state: RootState) => state.favorites);
   const navigate = useNavigate();
 
   const handleDetailRedirect = (id: string) => {
@@ -63,7 +63,7 @@ export const RecipeCard = ({ recipe, avgRating, onToggleFavourite }: Props) => {
             >
               <i
                 className={`pi ${
-                  isHovered || favourites.includes(recipe.id)
+                  isHovered || favorites.includes(recipe.id)
                     ? "pi-heart-fill"
                     : "pi-heart"
                 }`}

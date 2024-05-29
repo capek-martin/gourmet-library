@@ -30,7 +30,7 @@ export const RecipeFilters = ({ onFilterChange }: Props) => {
       return;
     }
     const value =
-      field === "favouritesOnly" || field === "withImagesOnly"
+      field === "favoritesOnly" || field === "withImagesOnly"
         ? e.checked
         : e.target
         ? e.target.value
@@ -88,11 +88,11 @@ export const RecipeFilters = ({ onFilterChange }: Props) => {
           <Checkbox
             inputId="favOnly"
             name="favOnly"
-            onChange={(e) => handleFilterChange(e, "favouritesOnly")}
-            checked={filters.favouritesOnly}
+            onChange={(e) => handleFilterChange(e, "favoritesOnly")}
+            checked={filters.favoritesOnly}
             className="mr-2"
           />
-          <label htmlFor="favOnly">Show only favourites</label>
+          <label htmlFor="favOnly">Show only favorites</label>
         </div>
       )}
       <div className="w-12 flex align-items-center">
