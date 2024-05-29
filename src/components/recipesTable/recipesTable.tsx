@@ -4,6 +4,9 @@ import { DataTable } from "primereact/datatable";
 import { paths } from "../../utils/core/routerContainer";
 import { Recipe } from "../../types/recipe.types";
 import { useNavigate } from "react-router-dom";
+import { truncateText } from "../../utils/app/utils";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 
 interface Props {
   recipeList: Recipe[];
@@ -11,6 +14,8 @@ interface Props {
 }
 
 export const RecipesTable = ({ recipeList, onDelete }: Props) => {
+  const { categories } = useSelector((state: RootState) => state.categories);
+
   const navigate = useNavigate();
 
   const imageBodyTemplate = (rowData: Recipe) => {
@@ -35,6 +40,9 @@ export const RecipesTable = ({ recipeList, onDelete }: Props) => {
         stripedRows
         tableStyle={{ overflowX: "hidden" }}
         scrollable
+        paginator={recipeList.length > 10}
+        rows={10}
+        size={"small"}
       >
         <Column
           sortable
@@ -44,14 +52,30 @@ export const RecipesTable = ({ recipeList, onDelete }: Props) => {
             <a
               onClick={() => navigate(`${paths.RECIPES}/${item.id}`)}
               className="text-blue-500 no-underline cursor-pointer"
+              title={item.title}
             >
-              {item.title}
+              {truncateText(item.title, 50)}
             </a>
           )}
         />
-        <Column body={imageBodyTemplate} style={{ width: "150px" }} />
-        <Column field="description" header="Description" />
-        <Column sortable field="categoryName" header="Category" />
+        <Column body={imageBodyTemplate} style={{ width: "50px" }} />
+        <Column
+          field="description"
+          header="Description"
+          body={(item) => (
+            <p title={item.description}>{truncateText(item.description, 50)}</p>
+          )}
+        />
+        <Column
+          sortable
+          field="categoryId"
+          header="Category"
+          body={(item) => (
+            <p>
+              {categories.find((x) => x.id === item.categoryId)?.name ?? ""}
+            </p>
+          )}
+        />
         <Column sortable field="prepTime" header="Preparation time" />
         <Column sortable field="estimatedPrice" header="Estimated price" />
         <Column sortable field="difficulty" header="Difficulty" />
@@ -66,7 +90,6 @@ export const RecipesTable = ({ recipeList, onDelete }: Props) => {
                 />
               );
             }}
-            style={{ width: "10%" }}
           />
         )}
       </DataTable>

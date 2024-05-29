@@ -9,6 +9,7 @@ import { toastSetting } from "../utils/app/toastSetting";
 import { RecipesTable } from "../components/recipesTable/recipesTable";
 import { TabView, TabPanel } from "primereact/tabview";
 import { fetchFavoriteRecipes } from "../features/favouritesSlice";
+import { fetchCategories } from "../features/categorySlice";
 
 export const ProfileForm = () => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -19,6 +20,7 @@ export const ProfileForm = () => {
 
   useEffect(() => {
     dispatch(fetchRecipes({ numRecords: 100, authorId: userInfo?.user_id }));
+    dispatch(fetchCategories());
     if (userInfo) dispatch(fetchFavoriteRecipes(userInfo?.user_id));
   }, []);
 

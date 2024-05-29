@@ -1,7 +1,6 @@
-// Variables
-$primary-color: #8e0e00;
-$secondary-color: #6c757d;
-$text-color: #333;
+@import "../../variables";
+
+// TODO - review
 
 h1 {
   margin-top: 0;
@@ -15,11 +14,6 @@ h1 {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
-.header {
-  border: 1px solid #000;
-  background: $primary-color; /* fallback for old browsers */
-}
-
 .card > .p-menubar {
   margin: 0;
   background-color: $primary-color;
@@ -31,9 +25,22 @@ h1 {
   background-color: $primary-color;
 }
 
+.p-menubar-root-list {
+  background-color: $primary-color;
+}
+
 .p-menubar .p-menuitem-link {
   color: #fff;
   padding: 8px;
+}
+
+.p-menuitem-link > * {
+  color: #fff;
+}
+
+.p-menubar-button {
+  color: #fff;
+  border: 1px solid #fff;
 }
 .p-menuitem-text,
 .p-menuitem-icon {
@@ -50,9 +57,6 @@ h1 {
 .p-menuitem-content:hover,
 .p-menuitem-content:active {
   background-color: $primary-color;
-}
-.p-menuitem-link > * {
-  color: #fff;
 }
 
 .p-submenu-list {

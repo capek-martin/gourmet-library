@@ -49,15 +49,6 @@ export const Header = () => {
           icon: "pi pi-list",
           command: () => navigate(paths.RECIPES),
         },
-        // in user´s profile
-        /* {
-          id: "my-recipes",
-          label: "My Recipes",
-          icon: "pi pi-star",
-          command: () =>
-            navigate(`${paths.RECIPES}?authorId=${userInfo?.user_id}`),
-          visible: isLoggedIn,
-        }, */
         {
           id: "randomRecipe",
           label: "Hungry & clueless?",

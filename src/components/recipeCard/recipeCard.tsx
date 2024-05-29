@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { Button } from "primereact/button";
 import { MouseEvent, useState } from "react";
 import { RecipeAvgRating } from "../../types/rating.types";
+import { truncateText } from "../../utils/app/utils";
 
 interface Props {
   recipe: Recipe;
@@ -71,8 +72,12 @@ export const RecipeCard = ({ recipe, avgRating, onToggleFavourite }: Props) => {
           </div>
         )}
 
-        <p className="font-bold text-xl mb-2">{recipe.title}</p>
-        <p className="text-gray-700 text-base">{recipe.description}</p>
+        <p title={recipe.title} className="font-bold text-xl mb-2">
+          {recipe.title && truncateText(recipe.title, 25)}
+        </p>
+        <p title={recipe.description} className="text-gray-700 text-base">
+          {recipe.description && truncateText(recipe.description, 30)}
+        </p>
       </div>
       <div className="pb-3">
         <Rating

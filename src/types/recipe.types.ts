@@ -10,12 +10,12 @@ export interface RecipeInputs {
   estimatedPrice?: number;
   imgUrls: string[];
   authorId?: string;
+  authorEmail?: string;
 }
 
 export interface Recipe extends RecipeInputs {
   id: string;
   categoryName?: string;
-  authorEmail?: string;
 }
 
 export enum DifficultyOpt {

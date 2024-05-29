@@ -28,6 +28,7 @@ export const RecipeCreate = () => {
           prepTime: values.prepTime,
           ingredients: arrayToString(values.ingredients as any, ";"),
           authorId: currentUser.userInfo?.user_id,
+          authorEmail: currentUser.userInfo?.email,
         })
       ).then((r) => {
         toast.success("Recipe created", { ...toastSetting });

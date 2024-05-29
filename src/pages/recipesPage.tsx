@@ -126,7 +126,7 @@ export const RecipesPage = () => {
     <div>
       <h1>Latest recipes</h1>
       <div className="flex">
-        <div className="hidden lg:block md:w-3 lg:w-15rem ml-3">
+        <div className="hidden lg:block md:w-3 lg:w-15rem">
           <RecipeFilters onFilterChange={handleFilterChange} />
         </div>
         <div className="w-10 flex flex-wrap justify-content-center mx-auto gap-4 mx-3 mb-8">

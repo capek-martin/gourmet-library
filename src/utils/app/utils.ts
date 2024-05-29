@@ -64,3 +64,10 @@ export const isValidEmail = (email: string) => {
   const pattern = /^[\w\.-]+@[\w\.-]+\.[\w]{2,}$/;
   return pattern.test(email);
 };
+
+export const truncateText = (text: string, maxLength: number) => {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength) + "...";
+};

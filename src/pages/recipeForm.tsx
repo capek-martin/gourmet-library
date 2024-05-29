@@ -197,7 +197,7 @@ export const RecipeForm = ({
           </div>
         </div>
 
-        <Button className="w-full" type="submit" label="Submit" />
+        <Button className="w-full mt-2" type="submit" label="Submit" />
       </div>
     </form>
   );

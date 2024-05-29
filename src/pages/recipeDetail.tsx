@@ -90,30 +90,33 @@ export const RecipeDetail = () => {
       <ConfirmDialog />
 
       {/*  */}
-      <div className="flex align-items-center">
-        <div className="col-6">
+      {/* flex align-items-center */}
+      <div className="flex flex-column md:flex-row md:align-items-center">
+        <div className="col-12 md:col-6">
           <h1>{recipe?.title}</h1>
         </div>
 
         {recipe?.authorId === userInfo?.user_id && (
-          <div className="col-6 flex justify-content-end gap-3">
-            <div className="">
-              <Button
-                label="Edit"
-                icon="pi pi-pencil"
-                severity="success"
-                className="ml-auto"
-                onClick={() => handleEditRedirect()}
-              />
-            </div>
-            <div className="">
-              <Button
-                label="Delete"
-                icon="pi pi-times"
-                severity="danger"
-                className="ml-auto"
-                onClick={handleDelete}
-              />
+          <div className="col-12 md:col-6">
+            <div className="flex gap-3 justify-content-start md:justify-content-end">
+              <div className="">
+                <Button
+                  label="Edit"
+                  icon="pi pi-pencil"
+                  severity="success"
+                  className="ml-auto"
+                  onClick={() => handleEditRedirect()}
+                />
+              </div>
+              <div className="">
+                <Button
+                  label="Delete"
+                  icon="pi pi-times"
+                  severity="danger"
+                  className="ml-auto"
+                  onClick={handleDelete}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -170,7 +173,8 @@ export const RecipeDetail = () => {
         <div className="col-12">
           <Divider />
           <p>
-            <b>Author:</b> {recipe?.authorEmail}
+            <b>Author:</b>{" "}
+            <a href={`mailto:${recipe?.authorEmail}`}>{recipe?.authorEmail}</a>
           </p>
           <Divider />
           <div className="text-center">

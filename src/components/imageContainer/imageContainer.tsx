@@ -21,7 +21,7 @@ export const ImageContainer = ({ imgUrls, onDelete }: Props) => {
         <img
           src={url}
           alt={imageTitle}
-          className="max-h-20rem max-w-20rem md:max-w-full md:max-h-full"
+          className="max-h-20rem max-w-20rem md:max-w-full md:max-h-30rem"
         />
       </>
     );
