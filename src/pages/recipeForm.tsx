@@ -5,7 +5,6 @@ import { Button } from "primereact/button";
 import { Dispatch, useEffect, useState } from "react";
 import { DifficultyOpt, RecipeInputs } from "../types/recipe.types";
 import { TextEditor } from "../components/TextEditor/TextEditor";
-import { Card } from "primereact/card";
 import { RadioButton } from "primereact/radiobutton";
 import {
   convertToMinutes,
@@ -70,14 +69,14 @@ export const RecipeForm = ({
   const inputCss = `w-full h-2.5rem`;
   const containerCss = `field col-12 m-0`;
   return (
-    <Card
-      title={isNew ? "New recipe" : "Edit recipe"}
-      className="my-3 border-round-lg border-noround-bottom"
-    >
-      <form onSubmit={handleSubmit(onSubmit)} className="">
+    <form onSubmit={handleSubmit(onSubmit)} className="">
+      <div>
+        <div>
+          <h1>{isNew ? "New recipe" : "Edit recipe"}</h1>
+        </div>
         <div className="md:flex">
           {/* p1 */}
-          <div className="md:w-6 mx-2">
+          <div className="md:w-6">
             <div className={containerCss}>
               <label htmlFor="title">Title</label>
               <InputText
@@ -199,7 +198,7 @@ export const RecipeForm = ({
         </div>
 
         <Button className="w-full" type="submit" label="Submit" />
-      </form>
-    </Card>
+      </div>
+    </form>
   );
 };

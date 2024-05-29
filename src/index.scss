@@ -13,6 +13,10 @@ body {
   font-family: Arial, sans-serif;
   color: $text-color;
   background-color: $background-color;
+  background: url("../public/assets/tasty-pizza-bg.jpg") no-repeat center
+    center fixed;
+  background-size: cover;
+  position: relative;
 }
 
 .p-progress-spinner-circle {

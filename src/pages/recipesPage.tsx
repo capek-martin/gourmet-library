@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchRecipes } from "../features/recipeSlice";
 import { RootState } from "../store/store";
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { ScrollTop } from "primereact/scrolltop";
 import { RecipeCard } from "../components/recipeCard/recipeCard";
 import { RecipeFilters } from "./recipeFilters";
 import { RecipeFilters as Filters } from "../types/recipe.types";
@@ -124,30 +123,23 @@ export const RecipesPage = () => {
   };
 
   return (
-    <>
-      <div className="p-grid p-dir-col pb-5">
-        <div>
-          <header className="header">
-            <h1>Latest recipes</h1>
-          </header>
-          <div className="flex">
-            <div className="hidden lg:block lg:w-2 mt-4">
-              <RecipeFilters onFilterChange={handleFilterChange} />
-            </div>
-            <div className="w-10 flex flex-wrap justify-content-center mx-auto gap-4">
-              {filteredRecipes?.map((recipe: Recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  avgRating={averageRatings && averageRatings[recipe.id]}
-                  onToggleFavourite={handleToggleFavourite}
-                />
-              ))}
-            </div>
-          </div>
+    <div>
+      <h1>Latest recipes</h1>
+      <div className="flex">
+        <div className="hidden lg:block md:w-3 lg:w-15rem ml-3">
+          <RecipeFilters onFilterChange={handleFilterChange} />
         </div>
-        <ScrollTop />
+        <div className="w-10 flex flex-wrap justify-content-center mx-auto gap-4 mx-3 mb-8">
+          {filteredRecipes?.map((recipe: Recipe) => (
+            <RecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              avgRating={averageRatings && averageRatings[recipe.id]}
+              onToggleFavourite={handleToggleFavourite}
+            />
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
 };

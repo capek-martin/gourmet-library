@@ -36,24 +36,9 @@ export const RegistrationForm = () => {
       })
       .catch(() => {
         reset({ email: "", password: "" });
-        // TODO
         toast.error(extractErrorMessage(error), { ...toastSetting });
         if (error) toast.error(error, { ...toastSetting });
       });
-
-    /* http
-      .post(apiUrl.REGISTER, {
-        email,
-        password,
-      })
-      .then((response) => {
-        dispatch(setUser(response.data));
-        toast.success("Registration succesfull", { ...toastSetting });
-        navigate(paths.HOME);
-      })
-      .catch((error: AxiosError) => {
-        toast.error(extractErrorMessage(error), { ...toastSetting });
-      }); */
   };
 
   const handleSignUp = () => {
@@ -66,10 +51,10 @@ export const RegistrationForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="card mx-auto mt-8 bg-white border-round-lg">
-        <div className="text-center text-3xl font-bold pt-3">
-          User Registration
-        </div>
+      <div>
+        <h1>User Registration</h1>
+      </div>
+      <div className="card mx-auto bg-white border-round-md">
         <div className="flex flex-column md:flex-row">
           <div className="w-full md:w-6 flex flex-column align-items-center justify-content-center gap-3 py-3 mx-auto">
             <div className="flex justify-content-center align-items-center gap-2">

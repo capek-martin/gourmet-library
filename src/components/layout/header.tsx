@@ -155,7 +155,7 @@ export const Header = () => {
   );
 
   return (
-    <div className="bg-green-500 text-white flex flex-column w-full align-items-center">
+    <div className="header text-white flex flex-column w-full align-items-center">
       <div className="w-12 md:w-10 lg:w-8 px-2 md:px-0 md:flex justify-content-between align-items-center">
         <div
           className="w-12 md:w-4 align-items-center justify-content-center md:justify-content-start flex gap-2"
@@ -165,11 +165,11 @@ export const Header = () => {
           <h2 className="m-0 p-2">Gourmet library</h2>
           <FontAwesomeIcon size="2x" icon={faUtensils} />
         </div>
-        <div className="card mx-auto w-10 md:w-8">
+        <div className="mx-auto w-10 md:w-8">
           <Menubar
             model={items}
             start={start}
-            className="w-12 flex justify-content-between md:justify-content-end"
+            className="w-12 bg-transparent border-none flex justify-content-between md:justify-content-end"
           />
         </div>
       </div>

@@ -1,9 +1,12 @@
+import { Card } from "primereact/card";
+import { ScrollTop } from "primereact/scrolltop";
 import { PropsWithChildren } from "react";
 
 export const Content = ({ children }: PropsWithChildren) => {
   return (
-    <div className="content my-0 mx-auto px-2 md:w-8 md:px-0 min-h-full">
-      {children}
+    <div className="mx-auto md:w-9 md:px-0">
+      <Card className="my-3 border-round-md rgba-background">{children}</Card>
+      <ScrollTop className="color-white primary-bg" />
     </div>
   );
 };

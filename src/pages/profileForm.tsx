@@ -42,22 +42,20 @@ export const ProfileForm = () => {
 
   return (
     <div>
-      <h1>User {userInfo?.email}</h1>
-      <div className="card">
-        <TabView>
-          <TabPanel header="My recipes">
-            <RecipesTable onDelete={handleDelete} recipeList={recipes} />
-          </TabPanel>
-          <TabPanel header="Favourite recipes">
-            <RecipesTable
-              recipeList={recipes.filter((r) => favourites.includes(r.id))}
-            />
-          </TabPanel>
-          <TabPanel header="Account settings">
-            <p className="m-0">TODO</p>
-          </TabPanel>
-        </TabView>
-      </div>
+      <h1 className="mt-0">User {userInfo?.email}</h1>
+      <TabView className="rgba-background">
+        <TabPanel header="My recipes" className="rgba-background">
+          <RecipesTable onDelete={handleDelete} recipeList={recipes} />
+        </TabPanel>
+        <TabPanel header="Favourite recipes">
+          <RecipesTable
+            recipeList={recipes.filter((r) => favourites.includes(r.id))}
+          />
+        </TabPanel>
+        <TabPanel header="Account settings">
+          <p className="m-0 h-20rem">TODO</p>
+        </TabPanel>
+      </TabView>
 
       <ConfirmDialog />
     </div>

@@ -1,4 +1,3 @@
-import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Divider } from "primereact/divider";
 import { useNavigate, useParams } from "react-router-dom";
@@ -89,104 +88,103 @@ export const RecipeDetail = () => {
   return (
     <>
       <ConfirmDialog />
-      <Card
-        title={
-          <div className="grid">
-            <div className="col-6">{recipe?.title}</div>
 
-            {recipe?.authorId === userInfo?.user_id && (
-              <div className="w-6 flex justify-content-end gap-3">
-                <div className="">
-                  <Button
-                    label="Edit"
-                    icon="pi pi-pencil"
-                    severity="success"
-                    className="ml-auto"
-                    onClick={() => handleEditRedirect()}
-                  />
-                </div>
-                <div className="">
-                  <Button
-                    label="Delete"
-                    icon="pi pi-times"
-                    severity="danger"
-                    className="ml-auto"
-                    onClick={handleDelete}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        }
-        className="my-3 border-round-lg"
-      >
-        <div className="flex flex-wrap justify-content-between">
-          <div className="col-12 md:col-6 border">
-            <div className="recipe-details">
-              <RecipeRating recipe={recipe} />
-              <p>
-                <b>Description:</b> {recipe?.description}
-              </p>
-              <p>
-                <b>Category:</b>{" "}
-                {categories.find((c) => c.id === recipe?.categoryId)?.name}
-              </p>
-              <p>
-                <b>Prep Time:</b> {formatTime(recipe?.prepTime)}
-              </p>
-              <p>
-                <b>Difficulty:</b> {recipe?.difficulty}
-              </p>
-              <p>
-                {/* TODO - currency */}
-                <b>Estimated price:</b> ${recipe?.estimatedPrice}
-              </p>
-              <Divider />
-              <div>
-                <h5>Ingredients:</h5>
-                <ul>
-                  {recipe?.ingredients
-                    ?.split(";")
-                    .map((ingredient: string, index: number) => (
-                      <li key={index}>{ingredient}</li>
-                    ))}
-                </ul>
-              </div>
-              <Divider />
-              <div>
-                <h5>Instructions:</h5>
-                {recipe?.instructions && (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: recipe?.instructions }}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+      {/*  */}
+      <div className="flex align-items-center">
+        <div className="col-6">
+          <h1>{recipe?.title}</h1>
+        </div>
 
-          <div className="col-12 md:col-6 flex">
-            <ImageContainer imgUrls={recipe.imgUrls ?? []} />
-          </div>
-
-          <div className="col-12">
-            <Divider />
-            <p>
-              <b>Author:</b> {recipe?.authorEmail}
-            </p>
-            <Divider />
-            <div className="text-center">
+        {recipe?.authorId === userInfo?.user_id && (
+          <div className="col-6 flex justify-content-end gap-3">
+            <div className="">
               <Button
-                label={
-                  isFavourite ? "Remove from favourites" : "Add to favourites"
-                }
-                icon="pi pi-heart"
-                className="p-button-raised p-button-rounded"
-                onClick={handleToggleFavourite}
+                label="Edit"
+                icon="pi pi-pencil"
+                severity="success"
+                className="ml-auto"
+                onClick={() => handleEditRedirect()}
+              />
+            </div>
+            <div className="">
+              <Button
+                label="Delete"
+                icon="pi pi-times"
+                severity="danger"
+                className="ml-auto"
+                onClick={handleDelete}
               />
             </div>
           </div>
+        )}
+      </div>
+      {/*  */}
+      <div className="flex flex-wrap justify-content-between">
+        <div className="col-12 md:col-6 border">
+          <div className="recipe-details">
+            <RecipeRating recipe={recipe} />
+            <p>
+              <b>Description:</b> {recipe?.description}
+            </p>
+            <p>
+              <b>Category:</b>{" "}
+              {categories.find((c) => c.id === recipe?.categoryId)?.name}
+            </p>
+            <p>
+              <b>Prep Time:</b> {formatTime(recipe?.prepTime)}
+            </p>
+            <p>
+              <b>Difficulty:</b> {recipe?.difficulty}
+            </p>
+            <p>
+              {/* TODO - currency */}
+              <b>Estimated price:</b> {recipe?.estimatedPrice}
+            </p>
+            <Divider />
+            <div>
+              <h5>Ingredients:</h5>
+              <ul>
+                {recipe?.ingredients
+                  ?.split(";")
+                  .map((ingredient: string, index: number) => (
+                    <li key={index}>{ingredient}</li>
+                  ))}
+              </ul>
+            </div>
+            <Divider />
+            <div>
+              <h5>Instructions:</h5>
+              {recipe?.instructions && (
+                <div
+                  dangerouslySetInnerHTML={{ __html: recipe?.instructions }}
+                />
+              )}
+            </div>
+          </div>
         </div>
-      </Card>
+
+        <div className="col-12 md:col-6 flex">
+          <ImageContainer imgUrls={recipe.imgUrls ?? []} />
+        </div>
+
+        <div className="col-12">
+          <Divider />
+          <p>
+            <b>Author:</b> {recipe?.authorEmail}
+          </p>
+          <Divider />
+          <div className="text-center">
+            <Button
+              label={
+                isFavourite ? "Remove from favourites" : "Add to favourites"
+              }
+              icon="pi pi-heart"
+              className="p-button-raised p-button-rounded"
+              onClick={handleToggleFavourite}
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 };

@@ -48,7 +48,7 @@ export const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Sign-in or sign-up</h1>
-      <div className="card mx-auto bg-white border-round-lg">
+      <div className="card mx-auto bg-white border-round-md w-full">
         <div className="flex flex-column md:flex-row p-4">
           <div className="w-full md:w-5 flex flex-column align-items-center justify-content-center gap-3 py-5">
             <div className="flex flex-wrap justify-content-center align-items-center gap-2">

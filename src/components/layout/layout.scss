@@ -1,23 +1,36 @@
 // Variables
-$primary-color: #4caf50;
+$primary-color: #8e0e00;
 $secondary-color: #6c757d;
-$background-color: #f0f0f0;
 $text-color: #333;
 
+h1 {
+  margin-top: 0;
+}
+
+.primary-bg {
+  background-color: $primary-color;
+}
+
+.rgba-background {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.header {
+  border: 1px solid #000;
+  background: $primary-color; /* fallback for old browsers */
+}
+
 .card > .p-menubar {
-  /* width: 100%;
-  display: flex;
-  justify-content: space-between; */
   margin: 0;
   background-color: $primary-color;
   border: none;
   color: white;
 }
 
-.p-menubar-button {
-  color: #fff;
-  border: 1px solid white;
+.p-menubar .p-menuitem.p-highlight > .p-menuitem-content {
+  background-color: $primary-color;
 }
+
 .p-menubar .p-menuitem-link {
   color: #fff;
   padding: 8px;
@@ -36,7 +49,7 @@ $text-color: #333;
 
 .p-menuitem-content:hover,
 .p-menuitem-content:active {
-  background-color: #357b38;
+  background-color: $primary-color;
 }
 .p-menuitem-link > * {
   color: #fff;
@@ -54,7 +67,7 @@ $text-color: #333;
 }
 
 .p-submenu-list a:hover {
-  background-color: #357b38;
+  background-color: $primary-color;
   .p-menuitem-icon,
   .p-menuitem-text {
     color: #fff;
