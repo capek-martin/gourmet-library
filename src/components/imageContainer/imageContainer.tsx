@@ -1,5 +1,5 @@
 import { Galleria } from "primereact/galleria";
-import foodPlaceholder from "../../food-placeholder.jpg";
+import foodPlaceholder from "../../assets/food-placeholder.jpg";
 import { Button } from "primereact/button";
 interface Props {
   imgUrls: string[];

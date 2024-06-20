@@ -8,8 +8,7 @@ body {
   height: 100%;
   font-family: Arial, sans-serif;
   color: $text-color;
-  background: url("../public/assets/tasty-pizza-bg.jpg") no-repeat center center
-    fixed;
+  background: url("./assets/tasty-pizza-bg.jpg") no-repeat center center fixed;
   background-size: cover;
   position: relative;
 }

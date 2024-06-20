@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Recipe } from "../../types/recipe.types";
 import { paths } from "../../utils/core/routerContainer";
-import foodPlaceholder from "../../food-placeholder.jpg";
+import foodPlaceholder from "../../assets/food-placeholder.jpg";
 import { Rating } from "primereact/rating";
 import { RootState } from "../../store/store";
 import { useSelector } from "react-redux";
