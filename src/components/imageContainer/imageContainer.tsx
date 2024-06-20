@@ -1,5 +1,4 @@
 import { Galleria } from "primereact/galleria";
-import foodPlaceholder from "../../assets/food-placeholder.jpg";
 import { Button } from "primereact/button";
 interface Props {
   imgUrls: string[];
@@ -28,11 +27,11 @@ export const ImageContainer = ({ imgUrls, onDelete }: Props) => {
   };
 
   const ifMultipleImages = imgUrls.length > 1 ? true : false;
-
+  if (!imgUrls) return;
   return (
-    <div className="card mx-auto shadow-md">
+    <div className="card">
       <Galleria
-        value={imgUrls.length > 0 ? imgUrls : [foodPlaceholder]}
+        value={imgUrls}
         showThumbnails={false}
         showIndicators={ifMultipleImages}
         showItemNavigators={ifMultipleImages}

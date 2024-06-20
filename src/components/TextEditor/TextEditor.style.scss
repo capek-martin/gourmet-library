@@ -1,12 +1,14 @@
-.quill {
-  height: 10rem !important;
+.ql-container {
+  height: 8rem !important;
 }
+
 .text-editor .dark button:hover {
   color: #ccc;
-  background-color: #ccc !important;
+  background-color: #ccc;
 }
 
 .dark .ql-toolbar {
+  height: 2.5rem !important;
   background-color: #fff;
   padding: 8px;
 }

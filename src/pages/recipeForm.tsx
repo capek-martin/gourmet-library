@@ -2,7 +2,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { Dispatch, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DifficultyOpt, RecipeInputs } from "../types/recipe.types";
 import { TextEditor } from "../components/TextEditor/TextEditor";
 import { RadioButton } from "primereact/radiobutton";
@@ -11,23 +11,23 @@ import {
   convertToTime,
   enumToArray,
 } from "../utils/app/utils";
-import { Chips } from "primereact/chips";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories, selectCategories } from "../features/categorySlice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { ImageContainer } from "../components/imageContainer/imageContainer";
+import { ImageUpload } from "../components/imageUpload/imageUpload";
 
 interface Props {
   onSubmit: SubmitHandler<RecipeInputs>;
   defaultValues?: RecipeInputs;
-  setSelectedFile?: Dispatch<any>;
+  setSelectedFiles: Dispatch<SetStateAction<File[]>>;
   onDeleteImage?: (title: string) => void;
 }
 
 export const RecipeForm = ({
   onSubmit,
   defaultValues,
-  setSelectedFile,
+  setSelectedFiles,
   onDeleteImage,
 }: Props) => {
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
@@ -37,13 +37,13 @@ export const RecipeForm = ({
   const [difficulty, setDifficulty] = useState<DifficultyOpt>(
     defaultValues?.difficulty ?? DifficultyOpt.MEDIUM
   );
-  const [selectedIngredients, setSelectedIngredients] = useState<any>(
-    defaultValues?.ingredients?.split(";") ?? []
+  const [ingredients, setIngredients] = useState<string>(
+    defaultValues?.ingredients ?? ""
   );
   const [selectedCategory, setSelectedCategory] = useState<number | null>(
     defaultValues?.categoryId ?? null
   );
-  const [contentValue, setContentValue] = useState<string>(
+  const [instructions, setInstructions] = useState<string>(
     defaultValues?.instructions ?? ""
   );
 
@@ -54,17 +54,14 @@ export const RecipeForm = ({
       setValue("categoryId", defaultValues.categoryId);
       setSelectedCategory(defaultValues.categoryId);
     }
-    if (defaultValues?.ingredients) {
-      setValue("ingredients", defaultValues.ingredients);
-      setSelectedIngredients(defaultValues.ingredients.split(";"));
-    }
 
     reset({ ...defaultValues });
   }, [defaultValues]);
 
   useEffect(() => {
-    setValue("instructions", contentValue);
-  }, [contentValue]);
+    setValue("instructions", instructions);
+    setValue("ingredients", ingredients);
+  }, [instructions, ingredients]);
 
   const inputCss = `w-full h-2.5rem`;
   const containerCss = `field col-12 m-0`;
@@ -91,24 +88,6 @@ export const RecipeForm = ({
                 id="description"
                 {...register("description")}
                 className={inputCss}
-              />
-            </div>
-            <div className={containerCss}>
-              <label htmlFor="ingredients">Ingredients</label>
-              <Chips
-                id="ingredients"
-                allowDuplicate={false}
-                value={selectedIngredients}
-                onChange={(e) => {
-                  if (!e.value) return;
-                  setValue("ingredients", e.value.join(";"));
-                  setSelectedIngredients(e.value);
-                }}
-                pt={{
-                  root: { className: "flex" },
-                  container: { className: "flex-1" },
-                  token: { className: "bg-primary mt-1" },
-                }}
               />
             </div>
             <div className={containerCss}>
@@ -172,28 +151,28 @@ export const RecipeForm = ({
               </div>
             </div>
             <div className={containerCss}>
+              <label htmlFor="ingredients">Ingredients</label>
+              <TextEditor value={ingredients} onChange={setIngredients} />
+            </div>
+            <div className={containerCss}>
               <label htmlFor="instructions">Instructions</label>
-              <TextEditor value={contentValue} onChange={setContentValue} />
+              <TextEditor value={instructions} onChange={setInstructions} />
             </div>
           </div>
           {/* p2 */}
           <div className="md:w-6 mx-2">
-            {setSelectedFile && (
-              <div className="col-2">
-                <input
-                  type="file"
-                  name="images"
-                  accept="image/*"
-                  multiple
-                  onChange={(e) => setSelectedFile(e.target.files)}
+            <div className="h-full flex flex-column justify-content-between">
+              <div className={containerCss}>
+                <label>Images</label>
+                <ImageUpload setSelectedFiles={setSelectedFiles} />
+              </div>
+              <div className={`col-12 m-0`}>
+                <ImageContainer
+                  imgUrls={defaultValues?.imgUrls ?? []}
+                  onDelete={onDeleteImage}
                 />
               </div>
-            )}
-
-            <ImageContainer
-              imgUrls={defaultValues?.imgUrls ?? []}
-              onDelete={onDeleteImage}
-            />
+            </div>
           </div>
         </div>
 

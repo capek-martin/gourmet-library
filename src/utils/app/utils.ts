@@ -71,3 +71,9 @@ export const truncateText = (text: string, maxLength: number) => {
   }
   return text.substring(0, maxLength) + "...";
 };
+
+export const addIndexBeforeExtension = (filename: string, index: number) => {
+  // doggo.jpg --> doggo_index.jpg
+  const splittedFilename = filename.split(".");
+  return splittedFilename[0] + "_" + index + "." + splittedFilename[1];
+};

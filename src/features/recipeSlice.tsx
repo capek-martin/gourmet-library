@@ -3,6 +3,7 @@ import { Recipe, RecipeInputs } from "../types/recipe.types";
 import { RootState } from "../store/store";
 import supabase, { recipeImgBucket } from "../utils/core/supabase";
 import { camelToSnake, snakeToCamel } from "../utils/app/supabaseUtils";
+import { addIndexBeforeExtension } from "../utils/app/utils";
 
 interface RecipeState {
   recipes: Recipe[];
@@ -65,7 +66,7 @@ export const fetchRecipeById = createAsyncThunk<Recipe, string>(
   }
 );
 
-export const addRecipe = createAsyncThunk(
+/* export const addRecipe = createAsyncThunk(
   "recipes/addRecipe",
   async (newRecipe: RecipeInputs) => {
     const snakeCaseRecipe = camelToSnake(newRecipe);
@@ -77,6 +78,86 @@ export const addRecipe = createAsyncThunk(
       throw new Error(error.message);
     }
     return snakeToCamel(data as any) as any;
+  }
+); */
+
+// TODO - review
+export const createRecipeWithImages = createAsyncThunk(
+  "recipes/createRecipeWithImages",
+  async (recipeData: RecipeInputs & { images: File[] }, thunkAPI) => {
+    const { images, ...newRecipe } = recipeData;
+
+    try {
+      // Convert recipe data keys to snake_case before sending to Supabase
+      const snakeCaseRecipe = camelToSnake(newRecipe);
+
+      // Create the recipe in Supabase
+      const { data: createdRecipe, error: createError } = await supabase
+        .from("recipes")
+        .insert(snakeCaseRecipe)
+        .single();
+
+      if (createError) {
+        throw new Error(createError.message);
+      }
+
+      // Convert received recipe keys from snake_case to camelCase
+      const camelCaseCreatedRecipe = snakeToCamel(createdRecipe);
+
+      // Upload each image to Supabase Storage and update recipe with image URLs
+      const imgUrls: string[] = [];
+      for (const image of images) {
+        const { data: uploadedImage, error: uploadError } =
+          await supabase.storage
+            .from(recipeImgBucket)
+            .upload(
+              `${camelCaseCreatedRecipe.id}/${addIndexBeforeExtension(
+                image.name,
+                imgUrls.length
+              )}`,
+              image
+            );
+
+        if (uploadError) {
+          throw new Error(
+            `Failed to upload image ${image.name}: ${uploadError.message}`
+          );
+        }
+
+        // get public URLs
+        if (uploadedImage) {
+          const { publicURL } = supabase.storage
+            .from(recipeImgBucket)
+            // remove bucket name otherwise it doubles in URL and is invalid (/recipe-images/recipe-images/...)
+            .getPublicUrl(uploadedImage.Key.split(recipeImgBucket + "/")[1]);
+
+          if (publicURL) {
+            imgUrls.push(publicURL);
+          }
+        }
+      }
+
+      // Convert image URLs array to snake_case format for Supabase
+      const snakeCaseImgUrls = camelToSnake({ imgUrls });
+
+      // Update the recipe with the image URLs
+      const { data: updatedRecipe, error: updateError } = await supabase
+        .from("recipes")
+        .update(snakeCaseImgUrls)
+        .eq("id", camelCaseCreatedRecipe.id)
+        .single();
+
+      if (updateError) {
+        throw new Error(updateError.message);
+      }
+
+      // Convert updated recipe keys from snake_case to camelCase
+      const camelCaseUpdatedRecipe = snakeToCamel(updatedRecipe);
+
+      return camelCaseUpdatedRecipe;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
 );
 
@@ -149,7 +230,7 @@ const recipeSlice = createSlice({
         state.loading = false;
         state.error = action.error.message ?? "An error occurred";
       })
-      .addCase(addRecipe.fulfilled, (state, action) => {
+      .addCase(createRecipeWithImages.fulfilled, (state, action: any) => {
         state.recipes.push(action.payload);
       })
       .addCase(updateRecipe.fulfilled, (state, action) => {

@@ -19,7 +19,6 @@ export const TextEditor = ({ value, onChange, toolbarOptionsExt }: Props) => {
   const toolbarOptions = [
     ["bold", "italic", "underline"], // toggled buttons
     [{ list: "ordered" }, { list: "bullet" }],
-    [{ direction: "rtl" }], // text direction
     [],
     [{ color: [] }, { background: [] }],
     [{ font: [] }],
@@ -30,23 +29,8 @@ export const TextEditor = ({ value, onChange, toolbarOptionsExt }: Props) => {
     onChange(inputValue);
   }, [inputValue]);
 
-  const editorHeight = "15rem";
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      onChange(inputValue);
-    });
-    const editor = document.querySelector(".text-editor");
-    if (editor) {
-      observer.observe(editor, { subtree: true, childList: true });
-    }
-    return () => {
-      observer.disconnect();
-    };
-  }, [inputValue, onChange]);
-
   return (
-    <div className="text-editor" style={{ height: editorHeight }}>
+    <div className="text-editor" style={{ height: "auto" }}>
       <ReactQuill
         className={`dark`}
         onChange={setInputValue}

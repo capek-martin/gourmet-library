@@ -13,7 +13,7 @@ import {
   updateRecipe,
 } from "../features/recipeSlice";
 import { useEffect, useState } from "react";
-import { arrayToString } from "../utils/app/utils";
+import { addIndexBeforeExtension } from "../utils/app/utils";
 import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
 import { paths } from "../utils/core/routerContainer";
@@ -102,7 +102,10 @@ export const RecipeEdit = () => {
         for (const file of selectedFile) {
           const { data, error } = await supabase.storage
             .from(recipeImgBucket)
-            .upload(id + "/" + file.name + "_" + imgUrls.length, file);
+            .upload(
+              `${id}/${addIndexBeforeExtension(file.name, imgUrls.length)}`,
+              file
+            );
 
           // get public url of uploaded img
           const publicURL = data
@@ -128,7 +131,6 @@ export const RecipeEdit = () => {
           updatedRecipe: {
             ...values,
             imgUrls: imgUrls,
-            ingredients: arrayToString(values.ingredients as any, ";"),
           },
         })
       );
@@ -151,7 +153,7 @@ export const RecipeEdit = () => {
     <RecipeForm
       onSubmit={handleOnSubmit}
       defaultValues={recipe}
-      setSelectedFile={setSelectedFile}
+      setSelectedFiles={setSelectedFile}
       onDeleteImage={deleteImage}
     />
   );

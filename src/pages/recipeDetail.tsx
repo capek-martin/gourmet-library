@@ -146,13 +146,11 @@ export const RecipeDetail = () => {
             <Divider />
             <div>
               <h5>Ingredients:</h5>
-              <ul>
-                {recipe?.ingredients
-                  ?.split(";")
-                  .map((ingredient: string, index: number) => (
-                    <li key={index}>{ingredient}</li>
-                  ))}
-              </ul>
+              {recipe?.ingredients && (
+                <div
+                  dangerouslySetInnerHTML={{ __html: recipe?.ingredients }}
+                />
+              )}
             </div>
             <Divider />
             <div>
@@ -179,9 +177,7 @@ export const RecipeDetail = () => {
           <Divider />
           <div className="text-center">
             <Button
-              label={
-                isFavourite ? "Remove from favorites" : "Add to favorites"
-              }
+              label={isFavourite ? "Remove from favorites" : "Add to favorites"}
               icon="pi pi-heart"
               className="p-button-raised p-button-rounded"
               onClick={handleToggleFavourite}
