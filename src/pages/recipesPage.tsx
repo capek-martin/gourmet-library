@@ -15,6 +15,8 @@ import {
 } from "../features/favoritesSlice";
 import { toast } from "react-toastify";
 import { toastSetting } from "../utils/app/toastSetting";
+import { Sidebar } from "primereact/sidebar";
+import { hideSidebar } from "../features/sidebarSlice";
 
 export const RecipesPage = () => {
   const params = new URLSearchParams(location.search);
@@ -24,6 +26,7 @@ export const RecipesPage = () => {
   const { favorites } = useSelector((state: RootState) => state.favorites);
   const { averageRatings } = useSelector((state: RootState) => state.ratings);
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const isVisible = useSelector((state: RootState) => state.sidebar.isVisible);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
   const [currentFilters, setCurrentFilters] = useState<Filters>(defaultFilter);
@@ -126,7 +129,29 @@ export const RecipesPage = () => {
     <div>
       <h1>Latest recipes</h1>
       <div className="flex">
-        <div className="hidden lg:block md:w-3 lg:w-15rem">
+        <div className="card flex justify-content-center">
+          <Sidebar
+            visible={isVisible}
+            onHide={() => dispatch(hideSidebar())}
+            content={() => (
+              <div className="min-h-screen flex relative lg:static">
+                <div
+                  id="app-sidebar"
+                  className="h-screen w-full px-3 block flex-shrink-0 absolute lg:static left-0 top-0 z-1 surface-border select-none"
+                >
+                  <div className="flex flex-column h-full pt-5">
+                    <RecipeFilters
+                      onFilterChange={handleFilterChange}
+                      _filters={currentFilters}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+        </div>
+
+        <div className="hidden lg:block md:w-3 lg:w-15rem lg:pr-3">
           <RecipeFilters onFilterChange={handleFilterChange} />
         </div>
         <div className="w-10 flex flex-wrap justify-content-center mx-auto gap-4 mx-3 mb-8">

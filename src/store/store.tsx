@@ -5,6 +5,7 @@ import categoryReducer from "../features/categorySlice";
 import loadingReducer from "../features/loadingSlice";
 import ratingReducer from "../features/ratingSlice";
 import favouriteReducer from "../features/favoritesSlice";
+import sidebarReducer from "../features/sidebarSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     ratings: ratingReducer,
     favorites: favouriteReducer,
     loading: loadingReducer,
+    sidebar: sidebarReducer,
   },
 });
 

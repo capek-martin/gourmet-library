@@ -10,12 +10,11 @@ h1 {
   background-color: $primary-color;
 }
 
-.rgba-background {
+.rgba-bg {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
 .card > .p-menubar {
-  margin: 0;
   background-color: $primary-color;
   border: none;
   color: white;
@@ -33,13 +32,17 @@ h1 {
   color: #fff;
   padding: 8px;
 }
+div.p-menubar .p-menubar-end {
+  margin-left: 0.5rem;
+}
 
 .p-menuitem-link > * {
   color: #fff;
 }
 
-.p-menubar-button {
+a.p-menubar-button {
   color: #fff;
+  margin-left: auto;
   border: 1px solid #fff;
 }
 .p-menuitem-text,

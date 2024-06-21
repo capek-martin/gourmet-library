@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -14,10 +14,11 @@ import { Rating } from "primereact/rating";
 
 interface Props {
   onFilterChange: (filters: Filters) => void;
+  _filters?: Filters;
 }
 
-export const RecipeFilters = ({ onFilterChange }: Props) => {
-  const [filters, setFilters] = useState<Filters>(defaultFilter);
+export const RecipeFilters = ({ onFilterChange, _filters }: Props) => {
+  const [filters, setFilters] = useState<Filters>(_filters ?? defaultFilter);
   const { categories: categoryList } = useSelector(
     (state: RootState) => state.categories
   );

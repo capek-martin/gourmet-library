@@ -9,9 +9,13 @@ export const Layout = ({ children }: PropsWithChildren) => {
   const isLoading = useSelector((state: any) => state.loading.isLoading);
 
   return (
-    <div className="main-container">
-      <Header />
-      {isLoading ? <Loader /> : <Content>{children}</Content>}
+    <div className="h-screen flex flex-column">
+      <div>
+        <Header />
+      </div>
+      <div className="h-full">
+        {isLoading ? <Loader /> : <Content>{children}</Content>}
+      </div>
     </div>
   );
 };

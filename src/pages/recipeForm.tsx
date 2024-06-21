@@ -106,7 +106,7 @@ export const RecipeForm = ({
                 className={inputCss}
               />
             </div>
-            <div className="flex gap-3">
+            <div className="flex">
               <div className="field col-6">
                 <label htmlFor="prepTime">Preparation Time</label>
                 <InputText
@@ -120,7 +120,7 @@ export const RecipeForm = ({
                   className={inputCss}
                 />
               </div>
-              <div className="field col-5">
+              <div className="field col-6">
                 <label htmlFor="estimatedPrice">Estimated price</label>
                 <InputText
                   id="estimatedPrice"
@@ -176,7 +176,9 @@ export const RecipeForm = ({
           </div>
         </div>
 
-        <Button className="w-full mt-2" type="submit" label="Submit" />
+        <div className="text-center">
+          <Button className="w-full md:w-30rem mt-4" type="submit" label="Submit" raised />
+        </div>
       </div>
     </form>
   );

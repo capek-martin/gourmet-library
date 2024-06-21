@@ -66,7 +66,7 @@ export const RecipeDetail = () => {
   };
 
   const handleToggleFavourite = () => {
-    if (!userInfo?.user_id || !recipe) return;
+    if (!userInfo?.user_id || !recipe) return navigate(paths.LOGIN);
     dispatch(
       toggleFavorite({ recipeId: recipe.id, userId: userInfo?.user_id })
     ).then(() => {
